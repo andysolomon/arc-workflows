@@ -1,0 +1,27 @@
+{
+  "name": "arc-workflows",
+  "version": "0.0.0",
+  "description": "Interactive CLI wizard for creating GitHub Actions workflows",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "arc-workflows": "./dist/bin/arc-workflows.js"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@arc-workflows/core": "workspace:*"
+  },
+  "license": "ISC"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@arc-workflows/api",
+  "version": "0.0.0",
+  "description": "Fluent builder API and Hono REST server for arc-workflows",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@arc-workflows/core": "workspace:*"
+  },
+  "license": "ISC"
+}
