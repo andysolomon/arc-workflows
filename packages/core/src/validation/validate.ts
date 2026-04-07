@@ -10,10 +10,24 @@
 import type { Workflow } from '../schema/index.js';
 import type { Rule, ValidationError, ValidationResult } from './errors.js';
 import { actionRefsRule } from './rules/action-refs.js';
+import { cronRule } from './rules/cron.js';
+import { expressionsRule } from './rules/expressions.js';
 import { jobDepsRule } from './rules/job-deps.js';
+import { matrixRule } from './rules/matrix.js';
+import { permissionsRule } from './rules/permissions.js';
 import { requiredFieldsRule } from './rules/required-fields.js';
+import { runnersRule } from './rules/runners.js';
 
-const RULES: Rule[] = [requiredFieldsRule, actionRefsRule, jobDepsRule];
+const RULES: Rule[] = [
+  requiredFieldsRule,
+  actionRefsRule,
+  jobDepsRule,
+  cronRule,
+  matrixRule,
+  permissionsRule,
+  expressionsRule,
+  runnersRule,
+];
 
 export function validate(workflow: Workflow): ValidationResult {
   const errors: ValidationError[] = [];
