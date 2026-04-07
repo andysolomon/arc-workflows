@@ -20,5 +20,8 @@
     "clean": "rm -rf dist *.tsbuildinfo",
     "test": "vitest run"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "expect-type": "^1.3.0"
+  }
 }
