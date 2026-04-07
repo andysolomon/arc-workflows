@@ -43,10 +43,8 @@ function buildJobs(jobs: Record<string, Job>): YAMLMap {
 
 function buildJob(job: Job): YAMLMap {
   if ('uses' in job && job.uses) {
-    return buildMapInOrder(
-      job as unknown as Record<string, unknown>,
-      REUSABLE_JOB_KEYS,
-      (_, v) => buildNode(v),
+    return buildMapInOrder(job as unknown as Record<string, unknown>, REUSABLE_JOB_KEYS, (_, v) =>
+      buildNode(v),
     );
   }
   return buildMapInOrder(
@@ -69,16 +67,12 @@ function buildSteps(steps: Step[]): YAMLSeq {
 
 function buildStep(step: Step): YAMLMap {
   if ('uses' in step && step.uses) {
-    return buildMapInOrder(
-      step as unknown as Record<string, unknown>,
-      ACTION_STEP_KEYS,
-      (_, v) => buildNode(v),
+    return buildMapInOrder(step as unknown as Record<string, unknown>, ACTION_STEP_KEYS, (_, v) =>
+      buildNode(v),
     );
   }
-  return buildMapInOrder(
-    step as unknown as Record<string, unknown>,
-    RUN_STEP_KEYS,
-    (_, v) => buildNode(v),
+  return buildMapInOrder(step as unknown as Record<string, unknown>, RUN_STEP_KEYS, (_, v) =>
+    buildNode(v),
   );
 }
 
