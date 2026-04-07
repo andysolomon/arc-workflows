@@ -14,9 +14,12 @@
   "bin": {
     "arc-workflows": "./dist/bin/arc-workflows.js"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc -b tsconfig.build.json",
     "clean": "rm -rf dist *.tsbuildinfo",
     "test": "vitest run"
   },
