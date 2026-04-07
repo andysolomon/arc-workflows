@@ -51,6 +51,31 @@ describe('validate (pipeline)', () => {
     expect(rules.has('job-deps')).toBe(true);
   });
 
+  it('collects errors from multiple extended rules', () => {
+    const wf: Workflow = {
+      on: {
+        push: { branches: ['main'] },
+        schedule: [{ cron: 'not-a-cron' }],
+      },
+      permissions: { 'bogus-scope': 'read' } as unknown as NonNullable<Workflow['permissions']>,
+      jobs: {
+        a: {
+          'runs-on': 'totally-made-up',
+          strategy: { matrix: { 'node-version': [] } },
+          steps: [{ run: 'echo ${{ secret.TOKEN }}' }],
+        },
+      },
+    };
+    const result = validate(wf);
+    const rules = new Set(result.errors.map((e) => e.rule));
+    expect(rules.has('cron')).toBe(true);
+    expect(rules.has('matrix')).toBe(true);
+    expect(rules.has('permissions')).toBe(true);
+    expect(rules.has('expressions')).toBe(true);
+    expect(rules.has('runners')).toBe(true);
+    expect(result.valid).toBe(false);
+  });
+
   it('marks valid: false when any error has severity `error`', () => {
     const wf: Workflow = {
       on: { push: { branches: ['main'] } },
