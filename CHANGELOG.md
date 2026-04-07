@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/andysolomon/arc-workflows/compare/v1.0.0...v1.1.0) (2026-04-07)
+
+### Features
+
+* **core:** add extended validation rules (ARC-64) ([#8](https://github.com/andysolomon/arc-workflows/issues/8)) ([1ff3ddf](https://github.com/andysolomon/arc-workflows/commit/1ff3ddfc8f21ce0f1b088017a489eff07507219c))
+
 ## 1.0.0 (2026-04-07)
 
 ### Features
