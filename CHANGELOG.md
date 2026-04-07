@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/andysolomon/arc-workflows/compare/v1.1.0...v1.2.0) (2026-04-07)
+
+### Features
+
+* **core:** add 10 built-in workflow templates (ARC-66) ([#9](https://github.com/andysolomon/arc-workflows/issues/9)) ([850ff5f](https://github.com/andysolomon/arc-workflows/commit/850ff5f8aafe0ef1c4d551c9d74affb757c842cd))
+
 ## [1.1.0](https://github.com/andysolomon/arc-workflows/compare/v1.0.0...v1.1.0) (2026-04-07)
 
 ### Features
