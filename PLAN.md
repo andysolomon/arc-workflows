@@ -35,6 +35,7 @@ Define TypeScript types that model the full GitHub Actions workflow spec:
 - `Permissions` — contents, issues, pull-requests, packages, etc.
 
 Support the full trigger event set:
+
 - Branch/tag filters (branches, branches-ignore, tags, tags-ignore, paths, paths-ignore)
 - Cron schedule
 - Manual dispatch with inputs
@@ -68,18 +69,18 @@ Convert the typed workflow object to valid GitHub Actions YAML:
 
 Built-in templates as starting points that the wizard can offer:
 
-| Template | Description |
-|----------|------------|
-| `ci-node` | Install, lint, test on PR — Node.js |
-| `ci-python` | Install, lint, test on PR — Python |
-| `deploy-vercel` | Deploy to Vercel on push to main |
-| `deploy-aws` | Deploy to AWS (ECR + ECS or Lambda) |
-| `release-semantic` | semantic-release on push to main |
-| `docker-build` | Build and push Docker image |
-| `cron-task` | Scheduled job with cron |
-| `manual-dispatch` | workflow_dispatch with typed inputs |
-| `reusable` | Reusable workflow with workflow_call |
-| `monorepo-ci` | Path-filtered CI for monorepo packages |
+| Template           | Description                            |
+| ------------------ | -------------------------------------- |
+| `ci-node`          | Install, lint, test on PR — Node.js    |
+| `ci-python`        | Install, lint, test on PR — Python     |
+| `deploy-vercel`    | Deploy to Vercel on push to main       |
+| `deploy-aws`       | Deploy to AWS (ECR + ECS or Lambda)    |
+| `release-semantic` | semantic-release on push to main       |
+| `docker-build`     | Build and push Docker image            |
+| `cron-task`        | Scheduled job with cron                |
+| `manual-dispatch`  | workflow_dispatch with typed inputs    |
+| `reusable`         | Reusable workflow with workflow_call   |
+| `monorepo-ci`      | Path-filtered CI for monorepo packages |
 
 Templates are TypeScript objects (not YAML files) so they compose with the wizard.
 
@@ -217,7 +218,7 @@ const ci = workflow('CI')
       .step(step().uses('actions/checkout@v4'))
       .step(step().uses('actions/setup-node@v4').with({ 'node-version': 'lts/*' }))
       .step(step().run('npm ci'))
-      .step(step().run('npm test'))
+      .step(step().run('npm test')),
   );
 
 const yaml = ci.toYAML();
@@ -228,13 +229,13 @@ ci.writeTo('.github/workflows/ci.yml');
 
 Express or Hono server exposing:
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/templates` | List available templates |
-| GET | `/api/templates/:id` | Get a template as a workflow object |
-| POST | `/api/workflows/validate` | Validate a workflow object |
-| POST | `/api/workflows/generate` | Generate YAML from a workflow object |
-| POST | `/api/workflows/parse` | Parse YAML back into a workflow object |
+| Method | Endpoint                  | Description                            |
+| ------ | ------------------------- | -------------------------------------- |
+| GET    | `/api/templates`          | List available templates               |
+| GET    | `/api/templates/:id`      | Get a template as a workflow object    |
+| POST   | `/api/workflows/validate` | Validate a workflow object             |
+| POST   | `/api/workflows/generate` | Generate YAML from a workflow object   |
+| POST   | `/api/workflows/parse`    | Parse YAML back into a workflow object |
 
 Stateless — no database needed. The web app sends workflow objects, the API validates and returns YAML.
 
@@ -268,12 +269,12 @@ This phase will get its own detailed plan once Phases 1–3 are complete.
 
 ## Development Milestones
 
-| Milestone | Phase | Definition of Done |
-|-----------|-------|--------------------|
-| **M1: Core engine** | 1 | Schema types, validation, YAML generation, 10 templates, full test coverage |
-| **M2: CLI wizard** | 2 | Interactive workflow creation from templates and scratch, edit mode, validate command |
-| **M3: Builder API** | 3 | Fluent TS API, REST endpoints, parse + generate round-trip |
-| **M4: Web app** | 4 | Visual editor with live preview, template gallery, GitHub OAuth |
+| Milestone           | Phase | Definition of Done                                                                    |
+| ------------------- | ----- | ------------------------------------------------------------------------------------- |
+| **M1: Core engine** | 1     | Schema types, validation, YAML generation, 10 templates, full test coverage           |
+| **M2: CLI wizard**  | 2     | Interactive workflow creation from templates and scratch, edit mode, validate command |
+| **M3: Builder API** | 3     | Fluent TS API, REST endpoints, parse + generate round-trip                            |
+| **M4: Web app**     | 4     | Visual editor with live preview, template gallery, GitHub OAuth                       |
 
 ## Conventions
 
