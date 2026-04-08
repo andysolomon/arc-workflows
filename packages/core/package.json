@@ -1,7 +1,7 @@
 {
   "name": "@arc-workflows/core",
   "version": "0.0.0",
-  "description": "Schema, validation, YAML generation, and templates for GitHub Actions workflows",
+  "description": "Schema, validation, YAML generation, and built-in templates for GitHub Actions workflows",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,6 +15,25 @@
     "dist",
     "README.md"
   ],
+  "keywords": [
+    "github-actions",
+    "workflow",
+    "yaml",
+    "ci",
+    "cd",
+    "schema",
+    "validation",
+    "typescript"
+  ],
+  "homepage": "https://github.com/andysolomon/arc-workflows#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andysolomon/arc-workflows.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/andysolomon/arc-workflows/issues"
+  },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "clean": "rm -rf dist *.tsbuildinfo",
