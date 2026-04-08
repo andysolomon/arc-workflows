@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/andysolomon/arc-workflows/compare/v1.4.0...v1.4.1) (2026-04-08)
+
+### Bug Fixes
+
+* **ci:** build packages before lint and test in PR checks ([#13](https://github.com/andysolomon/arc-workflows/issues/13)) ([9ac057b](https://github.com/andysolomon/arc-workflows/commit/9ac057b423ad88c325b6a3d67855939ff37cb100)), closes [#12](https://github.com/andysolomon/arc-workflows/issues/12)
+
 ## [1.4.0](https://github.com/andysolomon/arc-workflows/compare/v1.3.0...v1.4.0) (2026-04-08)
 
 ### Features
