@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/andysolomon/arc-workflows/compare/v1.3.0...v1.4.0) (2026-04-08)
+
+### Features
+
+* **api:** add fluent builder, Hono server, and integration tests (ARC-79, ARC-80, ARC-81) ([#12](https://github.com/andysolomon/arc-workflows/issues/12)) ([2f1b27f](https://github.com/andysolomon/arc-workflows/commit/2f1b27fc3d187de78e608d3d6c149d0279ee2050))
+
 ## [1.3.0](https://github.com/andysolomon/arc-workflows/compare/v1.2.0...v1.3.0) (2026-04-08)
 
 ### Features
