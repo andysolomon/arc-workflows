@@ -11,6 +11,7 @@ export interface GenerateOptions {
   header?: string;
 }
 
+/** @internal */
 export const DEFAULT_OPTIONS: Required<Omit<GenerateOptions, 'header'>> = {
   indent: 2,
   lineWidth: 0,

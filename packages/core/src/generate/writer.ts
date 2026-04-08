@@ -8,9 +8,20 @@ import { generate } from './generate.js';
 import type { GenerateOptions } from './options.js';
 
 /**
- * Serialize `workflow` to YAML and write it to disk. When `filePath`
- * is omitted, the file is placed at `.github/workflows/<slug>.yml`
- * (slugged from `workflow.name`, or `workflow.yml` as a last resort).
+ * Serialize a `Workflow` to YAML and write it to disk.
+ *
+ * When `filePath` is omitted, the file is placed at
+ * `.github/workflows/<slug>.yml` (slugged from `workflow.name`, or
+ * `workflow.yml` as a last resort). Parent directories are created as
+ * needed.
+ *
+ * @example
+ * ```ts
+ * import { getTemplate, writeWorkflow } from '@arc-workflows/core';
+ *
+ * const wf = getTemplate('ci-node', { nodeVersion: '20' });
+ * await writeWorkflow(wf, '.github/workflows/ci.yml');
+ * ```
  */
 export async function writeWorkflow(
   workflow: Workflow,
@@ -25,6 +36,8 @@ export async function writeWorkflow(
 
 /**
  * Default output path for a workflow. Exposed for testing.
+ *
+ * @internal
  */
 export function defaultPath(workflow: Workflow): string {
   const slug = (workflow.name ?? 'workflow')

@@ -2,12 +2,16 @@ import type { Workflow } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `ci-node` template.
+ */
 export interface CiNodeParams {
   nodeVersion?: string;
   packageManager?: 'npm' | 'pnpm' | 'yarn';
   branch?: string;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const ciNodeMetadata: TemplateMetadata = {
   id: 'ci-node',
   name: 'CI - Node.js',
@@ -15,6 +19,7 @@ export const ciNodeMetadata: TemplateMetadata = {
   tags: ['ci', 'node', 'javascript', 'typescript'],
 };
 
+/** @internal — use `getTemplate('ci-node')` instead. */
 export function ciNode(params: CiNodeParams = {}): Workflow {
   const nodeVersion = params.nodeVersion ?? 'lts/*';
   const pm = params.packageManager ?? 'npm';

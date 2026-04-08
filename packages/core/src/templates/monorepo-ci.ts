@@ -2,11 +2,15 @@ import type { Job, Workflow } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `monorepo-ci` template.
+ */
 export interface MonorepoCiParams {
   branch?: string;
   packages?: string[];
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const monorepoCiMetadata: TemplateMetadata = {
   id: 'monorepo-ci',
   name: 'Monorepo CI',
@@ -25,6 +29,7 @@ function slugify(pkgPath: string): string {
     .toLowerCase();
 }
 
+/** @internal — use `getTemplate('monorepo-ci')` instead. */
 export function monorepoCi(params: MonorepoCiParams = {}): Workflow {
   const branch = params.branch ?? 'main';
   const packages = params.packages ?? ['packages/a', 'packages/b'];

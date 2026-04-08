@@ -51,6 +51,12 @@ export {
   reusableMetadata,
 };
 
+/**
+ * Frozen list of metadata for every built-in template, in display order.
+ *
+ * Prefer `listTemplates()` for read access — it returns the same value
+ * with a stable, public-API signature.
+ */
 export const TEMPLATES: readonly TemplateMetadata[] = [
   ciNodeMetadata,
   ciPythonMetadata,
@@ -64,10 +70,42 @@ export const TEMPLATES: readonly TemplateMetadata[] = [
   monorepoCiMetadata,
 ];
 
+/**
+ * List metadata for every built-in template.
+ *
+ * The returned array is stable across calls and ordered for display
+ * (CI templates first, then deploys, releases, infra, and the
+ * monorepo template last).
+ *
+ * @example
+ * ```ts
+ * import { listTemplates, getTemplate } from '@arc-workflows/core';
+ *
+ * for (const meta of listTemplates()) {
+ *   console.log(meta.id, meta.description);
+ * }
+ * ```
+ */
 export function listTemplates(): readonly TemplateMetadata[] {
   return TEMPLATES;
 }
 
+/**
+ * Instantiate a built-in template by id.
+ *
+ * Each overload binds a `TemplateId` literal to its matching `*Params`
+ * shape so callers get end-to-end parameter type checking. The returned
+ * `Workflow` is fully typed and ready to feed into `validate()`,
+ * `generate()`, or `writeWorkflow()`.
+ *
+ * @example
+ * ```ts
+ * import { getTemplate, writeWorkflow } from '@arc-workflows/core';
+ *
+ * const ci = getTemplate('ci-node', { nodeVersion: '20', packageManager: 'pnpm' });
+ * await writeWorkflow(ci, '.github/workflows/ci.yml');
+ * ```
+ */
 export function getTemplate(id: 'ci-node', params?: CiNodeParams): Workflow;
 export function getTemplate(id: 'ci-python', params?: CiPythonParams): Workflow;
 export function getTemplate(id: 'deploy-vercel', params?: DeployVercelParams): Workflow;

@@ -2,11 +2,15 @@ import type { Workflow } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `ci-python` template.
+ */
 export interface CiPythonParams {
   pythonVersion?: string;
   branch?: string;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const ciPythonMetadata: TemplateMetadata = {
   id: 'ci-python',
   name: 'CI - Python',
@@ -14,6 +18,7 @@ export const ciPythonMetadata: TemplateMetadata = {
   tags: ['ci', 'python'],
 };
 
+/** @internal — use `getTemplate('ci-python')` instead. */
 export function ciPython(params: CiPythonParams = {}): Workflow {
   const pythonVersion = params.pythonVersion ?? '3.x';
   const branch = params.branch ?? 'main';

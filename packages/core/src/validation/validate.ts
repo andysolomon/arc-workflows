@@ -29,6 +29,27 @@ const RULES: Rule[] = [
   runnersRule,
 ];
 
+/**
+ * Run the full validation pipeline against a workflow.
+ *
+ * Every rule is invoked in order and their findings are concatenated.
+ * The pipeline never throws — invalid inputs surface as
+ * `ValidationError`s. The `valid` flag is `true` iff there are zero
+ * findings with severity `'error'`; warnings and infos do not make a
+ * workflow invalid.
+ *
+ * @example
+ * ```ts
+ * import { validate, type Workflow } from '@arc-workflows/core';
+ *
+ * const result = validate(workflow);
+ * if (!result.valid) {
+ *   for (const err of result.errors) {
+ *     console.error(`${err.path.join('.')}: ${err.message}`);
+ *   }
+ * }
+ * ```
+ */
 export function validate(workflow: Workflow): ValidationResult {
   const errors: ValidationError[] = [];
   for (const rule of RULES) {

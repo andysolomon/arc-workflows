@@ -2,10 +2,14 @@ import type { Workflow, WorkflowDispatchInput } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `manual-dispatch` template.
+ */
 export interface ManualDispatchParams {
   inputs?: Record<string, WorkflowDispatchInput>;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const manualDispatchMetadata: TemplateMetadata = {
   id: 'manual-dispatch',
   name: 'Manual Dispatch',
@@ -23,6 +27,7 @@ const DEFAULT_INPUTS: Record<string, WorkflowDispatchInput> = {
   },
 };
 
+/** @internal — use `getTemplate('manual-dispatch')` instead. */
 export function manualDispatch(params: ManualDispatchParams = {}): Workflow {
   const inputs = params.inputs ?? DEFAULT_INPUTS;
 

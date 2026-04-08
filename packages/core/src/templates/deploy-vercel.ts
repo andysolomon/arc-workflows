@@ -2,11 +2,15 @@ import type { Workflow } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `deploy-vercel` template.
+ */
 export interface DeployVercelParams {
   branch?: string;
   environment?: string;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const deployVercelMetadata: TemplateMetadata = {
   id: 'deploy-vercel',
   name: 'Deploy to Vercel',
@@ -14,6 +18,7 @@ export const deployVercelMetadata: TemplateMetadata = {
   tags: ['deploy', 'vercel'],
 };
 
+/** @internal — use `getTemplate('deploy-vercel')` instead. */
 export function deployVercel(params: DeployVercelParams = {}): Workflow {
   const branch = params.branch ?? 'main';
   const environment = params.environment ?? 'production';
