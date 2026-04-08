@@ -31,6 +31,8 @@ jobs:
           node-version: 'lts/*'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
+      - name: Build (so cross-package types resolve for typescript-eslint)
+        run: pnpm -r build
       - run: pnpm lint
 
   test:
@@ -44,4 +46,6 @@ jobs:
           node-version: 'lts/*'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
+      - name: Build (so cross-package imports resolve at test time)
+        run: pnpm -r build
       - run: pnpm test
