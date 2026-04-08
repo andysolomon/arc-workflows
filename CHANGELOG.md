@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/andysolomon/arc-workflows/compare/v1.2.0...v1.3.0) (2026-04-08)
+
+### Features
+
+* **core:** add config file support (ARC-67) ([#10](https://github.com/andysolomon/arc-workflows/issues/10)) ([a72026a](https://github.com/andysolomon/arc-workflows/commit/a72026a417b2bfeb1c6c2fa51e785ddc48e4d93b))
+
 ## [1.2.0](https://github.com/andysolomon/arc-workflows/compare/v1.1.0...v1.2.0) (2026-04-07)
 
 ### Features
