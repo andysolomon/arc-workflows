@@ -2,6 +2,9 @@ import type { Workflow } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `deploy-aws` template.
+ */
 export interface DeployAwsParams {
   branch?: string;
   region?: string;
@@ -10,6 +13,7 @@ export interface DeployAwsParams {
   ecsService?: string;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const deployAwsMetadata: TemplateMetadata = {
   id: 'deploy-aws',
   name: 'Deploy to AWS (ECR + ECS)',
@@ -17,6 +21,7 @@ export const deployAwsMetadata: TemplateMetadata = {
   tags: ['deploy', 'aws', 'ecs', 'docker'],
 };
 
+/** @internal — use `getTemplate('deploy-aws')` instead. */
 export function deployAws(params: DeployAwsParams = {}): Workflow {
   const branch = params.branch ?? 'main';
   const region = params.region ?? 'us-east-1';

@@ -2,11 +2,15 @@ import type { Workflow, WorkflowCallInput, WorkflowCallSecret } from '../schema/
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `reusable` template.
+ */
 export interface ReusableParams {
   callableInputs?: Record<string, WorkflowCallInput>;
   callableSecrets?: Record<string, WorkflowCallSecret>;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const reusableMetadata: TemplateMetadata = {
   id: 'reusable',
   name: 'Reusable Workflow',
@@ -29,6 +33,7 @@ const DEFAULT_SECRETS: Record<string, WorkflowCallSecret> = {
   },
 };
 
+/** @internal — use `getTemplate('reusable')` instead. */
 export function reusable(params: ReusableParams = {}): Workflow {
   const inputs = params.callableInputs ?? DEFAULT_INPUTS;
   const secrets = params.callableSecrets ?? DEFAULT_SECRETS;

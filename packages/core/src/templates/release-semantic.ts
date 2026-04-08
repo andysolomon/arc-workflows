@@ -2,11 +2,15 @@ import type { Workflow } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `release-semantic` template.
+ */
 export interface ReleaseSemanticParams {
   branch?: string;
   nodeVersion?: string;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const releaseSemanticMetadata: TemplateMetadata = {
   id: 'release-semantic',
   name: 'Semantic Release',
@@ -14,6 +18,7 @@ export const releaseSemanticMetadata: TemplateMetadata = {
   tags: ['release', 'semver', 'changelog'],
 };
 
+/** @internal — use `getTemplate('release-semantic')` instead. */
 export function releaseSemantic(params: ReleaseSemanticParams = {}): Workflow {
   const branch = params.branch ?? 'main';
   const nodeVersion = params.nodeVersion ?? 'lts/*';

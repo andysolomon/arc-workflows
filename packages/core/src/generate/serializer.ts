@@ -20,6 +20,14 @@ import {
   WORKFLOW_KEYS,
 } from './key-order.js';
 
+/**
+ * Build a `yaml.Document` AST from a `Workflow` object.
+ *
+ * Internal serializer detail used by `generate()`. Consumers should
+ * call `generate()` instead of constructing the document directly.
+ *
+ * @internal
+ */
 export function serializeWorkflow(workflow: Workflow): Document {
   const doc = new Document();
   doc.contents = buildMapInOrder(

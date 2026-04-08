@@ -2,12 +2,16 @@ import type { Workflow } from '../schema/index.js';
 
 import type { TemplateMetadata } from './types.js';
 
+/**
+ * Parameters for the `docker-build` template.
+ */
 export interface DockerBuildParams {
   branch?: string;
   imageName?: string;
   registry?: string;
 }
 
+/** @internal — use `listTemplates()` instead. */
 export const dockerBuildMetadata: TemplateMetadata = {
   id: 'docker-build',
   name: 'Docker Build & Push',
@@ -15,6 +19,7 @@ export const dockerBuildMetadata: TemplateMetadata = {
   tags: ['docker', 'build', 'release'],
 };
 
+/** @internal — use `getTemplate('docker-build')` instead. */
 export function dockerBuild(params: DockerBuildParams = {}): Workflow {
   const branch = params.branch ?? 'main';
   const imageName = params.imageName ?? 'my-image';
