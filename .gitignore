@@ -6,3 +6,8 @@ coverage/
 .env.local
 pnpm-debug.log*
 .DS_Store
+
+# Next.js
+apps/web/.next/
+apps/web/next-env.d.ts
+apps/web/.env.local
