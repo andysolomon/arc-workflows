@@ -12,6 +12,9 @@ export default tseslint.config(
       '**/coverage/**',
       '**/*.tsbuildinfo',
       'pnpm-lock.yaml',
+      // Next.js generated output and ambient type files
+      '**/.next/**',
+      'apps/web/next-env.d.ts',
     ],
   },
   js.configs.recommended,
@@ -35,8 +38,8 @@ export default tseslint.config(
     },
   },
   {
-    // JS/TS config files at the repo root — outside the project service
-    files: ['*.config.js', '*.config.mjs', '*.config.ts', 'vitest.workspace.ts'],
+    // JS/TS config files — outside the TypeScript project service
+    files: ['**/*.config.js', '**/*.config.mjs', '**/*.config.ts', 'vitest.workspace.ts'],
     extends: [tseslint.configs.disableTypeChecked],
     languageOptions: {
       parserOptions: {
