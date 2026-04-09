@@ -27,3 +27,4 @@ export * from './validation/index.js';
 export * from './generate/index.js';
 export * from './templates/index.js';
 export * from './config/index.js';
+export * from './data/common-actions.js';
