@@ -23,7 +23,19 @@ function rewrite(request: Request): Request {
   } else if (url.pathname === '/api/v1') {
     url.pathname = '/api';
   }
-  return new Request(url, request);
+  // Build init explicitly. Passing the original Request as init copies its
+  // `signal` field, which Node 22 (strict) rejects with a TypeError because
+  // AbortSignal validation fails across realm boundaries. Construct a fresh
+  // RequestInit with only the fields Hono needs.
+  const init: RequestInit & { duplex?: 'half' } = {
+    method: request.method,
+    headers: request.headers,
+  };
+  if (request.body) {
+    init.body = request.body;
+    init.duplex = 'half';
+  }
+  return new Request(url.toString(), init);
 }
 
 function wrap(): (req: Request) => Response | Promise<Response> {
