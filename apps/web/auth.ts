@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { type NextAuthResult } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 
 declare module 'next-auth' {
@@ -7,13 +7,7 @@ declare module 'next-auth' {
   }
 }
 
-declare module '@auth/core/jwt' {
-  interface JWT {
-    accessToken?: string;
-  }
-}
-
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const result: NextAuthResult = NextAuth({
   providers: [
     GitHub({
       authorization: {
@@ -24,15 +18,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     jwt({ token, account }) {
       if (account?.access_token) {
-        token.accessToken = account.access_token;
+        (token as { accessToken?: string }).accessToken = account.access_token;
       }
       return token;
     },
     session({ session, token }) {
-      if (token.accessToken) {
-        session.accessToken = token.accessToken;
+      const accessToken = (token as { accessToken?: string }).accessToken;
+      if (accessToken) {
+        session.accessToken = accessToken;
       }
       return session;
     },
   },
 });
+
+export const handlers: NextAuthResult['handlers'] = result.handlers;
+export const auth: NextAuthResult['auth'] = result.auth;
+export const signIn: NextAuthResult['signIn'] = result.signIn;
+export const signOut: NextAuthResult['signOut'] = result.signOut;

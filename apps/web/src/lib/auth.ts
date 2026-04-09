@@ -1,1 +1,1 @@
-export { auth, signIn, signOut, handlers } from '../../auth.js';
+export { auth, signIn, signOut, handlers } from '../../auth';

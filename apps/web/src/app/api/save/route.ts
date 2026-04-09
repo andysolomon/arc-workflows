@@ -37,15 +37,16 @@ export async function POST(req: Request): Promise<Response> {
     // File doesn't exist — that's a normal create
   }
 
-  await octokit.rest.repos.createOrUpdateFileContents({
+  const params: Parameters<typeof octokit.rest.repos.createOrUpdateFileContents>[0] = {
     owner,
     repo,
     path,
     message,
     content: Buffer.from(content).toString('base64'),
     branch,
-    sha,
-  });
+  };
+  if (sha !== undefined) params.sha = sha;
+  await octokit.rest.repos.createOrUpdateFileContents(params);
 
   return Response.json({ success: true });
 }

@@ -58,27 +58,27 @@ export function workflowReducer(state: Workflow, action: WorkflowAction): Workfl
     }
 
     case 'update-step': {
-      const job = state.jobs[action.jobId];
-      if (!job || !('steps' in job) || !job.steps) return state;
+      const job = asNormalJob(state.jobs[action.jobId]);
+      if (!job?.steps) return state;
       const newSteps = [...job.steps];
       newSteps[action.stepIndex] = action.step;
-      const updatedJob: NormalJob = { ...(job as NormalJob), steps: newSteps };
+      const updatedJob: NormalJob = { ...job, steps: newSteps };
       return { ...state, jobs: { ...state.jobs, [action.jobId]: updatedJob } };
     }
 
     case 'add-step': {
-      const job = state.jobs[action.jobId];
-      if (!job || !('steps' in job)) return state;
-      const newSteps: Step[] = [...((job as NormalJob).steps ?? []), action.step];
-      const updatedJob: NormalJob = { ...(job as NormalJob), steps: newSteps };
+      const job = asNormalJob(state.jobs[action.jobId]);
+      if (!job) return state;
+      const newSteps: Step[] = [...(job.steps ?? []), action.step];
+      const updatedJob: NormalJob = { ...job, steps: newSteps };
       return { ...state, jobs: { ...state.jobs, [action.jobId]: updatedJob } };
     }
 
     case 'remove-step': {
-      const job = state.jobs[action.jobId];
-      if (!job || !('steps' in job) || !job.steps) return state;
+      const job = asNormalJob(state.jobs[action.jobId]);
+      if (!job?.steps) return state;
       const newSteps = job.steps.filter((_, i) => i !== action.stepIndex);
-      const updatedJob: NormalJob = { ...(job as NormalJob), steps: newSteps };
+      const updatedJob: NormalJob = { ...job, steps: newSteps };
       return { ...state, jobs: { ...state.jobs, [action.jobId]: updatedJob } };
     }
 
@@ -91,6 +91,12 @@ export function workflowReducer(state: Workflow, action: WorkflowAction): Workfl
 }
 
 // ── helpers ────────────────────────────────────────────────────────────
+
+function asNormalJob(job: Job | undefined): NormalJob | undefined {
+  if (!job) return undefined;
+  if ('uses' in job && job.uses !== undefined) return undefined;
+  return job;
+}
 
 function needsOf(job: Job): string[] {
   if (Array.isArray(job.needs)) return job.needs;
