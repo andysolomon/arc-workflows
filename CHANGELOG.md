@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/andysolomon/arc-workflows/compare/v1.4.1...v1.5.0) (2026-04-09)
+
+### Features
+
+* **web:** add next.js scaffold and template gallery (ARC-82, ARC-83) ([#14](https://github.com/andysolomon/arc-workflows/issues/14)) ([f16c7f5](https://github.com/andysolomon/arc-workflows/commit/f16c7f59f17051306b4a63b6756f93a590d62712))
+
 ## [1.4.1](https://github.com/andysolomon/arc-workflows/compare/v1.4.0...v1.4.1) (2026-04-08)
 
 ### Bug Fixes
