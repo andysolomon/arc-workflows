@@ -110,7 +110,11 @@ export const COMMON_ACTIONS: readonly CommonAction[] = [
         required: true,
         options: ['temurin', 'zulu', 'corretto', 'microsoft', 'liberica', 'oracle'],
       },
-      { name: 'cache', description: 'Build tool to cache for', options: ['maven', 'gradle', 'sbt'] },
+      {
+        name: 'cache',
+        description: 'Build tool to cache for',
+        options: ['maven', 'gradle', 'sbt'],
+      },
     ],
   },
   {
@@ -226,9 +230,7 @@ export const COMMON_ACTIONS: readonly CommonAction[] = [
     version: 'v2',
     description: 'Log in to Amazon ECR',
     tags: ['aws', 'docker', 'auth'],
-    inputs: [
-      { name: 'registries', description: 'Comma-separated list of ECR registry IDs' },
-    ],
+    inputs: [{ name: 'registries', description: 'Comma-separated list of ECR registry IDs' }],
   },
   {
     name: 'peaceiris/actions-gh-pages',

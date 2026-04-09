@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  COMMON_ACTIONS,
-  getTemplate,
-  type TemplateId,
-  type Workflow,
-} from '@arc-workflows/core';
+import { COMMON_ACTIONS, getTemplate, type TemplateId, type Workflow } from '@arc-workflows/core';
 import { EditorClient } from '@/components/editor/editor-client';
 import { notFound } from 'next/navigation';
 

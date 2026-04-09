@@ -57,7 +57,13 @@ function EditorInner({ initialWorkflow, commonActions }: Props): React.JSX.Eleme
       </header>
       <div className="flex-1 grid grid-cols-2">
         <div className="border-r">
-          <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} onConnect={onConnect} fitView>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            nodeTypes={nodeTypes}
+            onConnect={onConnect}
+            fitView
+          >
             <Background />
             <Controls />
           </ReactFlow>
