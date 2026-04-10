@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/andysolomon/arc-workflows/compare/v1.5.0...v1.6.0) (2026-04-10)
+
+### Features
+
+* **web:** add visual editor with monaco preview and github save (ARC-84, ARC-85, ARC-86) ([#15](https://github.com/andysolomon/arc-workflows/issues/15)) ([b7c401b](https://github.com/andysolomon/arc-workflows/commit/b7c401bfebce038fb8fa46e6ff0d7adabd8d33ee))
+
 ## [1.5.0](https://github.com/andysolomon/arc-workflows/compare/v1.4.1...v1.5.0) (2026-04-09)
 
 ### Features
