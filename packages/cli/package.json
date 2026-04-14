@@ -24,7 +24,15 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@arc-workflows/core": "workspace:*"
+    "@arc-workflows/core": "workspace:*",
+    "ink": "^5.0.0",
+    "react": "^18.3.0",
+    "xstate": "^5.18.0",
+    "@xstate/react": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "ink-testing-library": "^4.0.0"
   },
   "license": "ISC"
 }
