@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/andysolomon/arc-workflows/compare/v1.6.0...v1.7.0) (2026-04-14)
+
+### Features
+
+* **cli:** add XState wizard state machine and Ink app shell (ARC-69) ([#16](https://github.com/andysolomon/arc-workflows/issues/16)) ([59af7fb](https://github.com/andysolomon/arc-workflows/commit/59af7fb6cc8ba3d62238ef36772b38e69893871e))
+
 ## [1.6.0](https://github.com/andysolomon/arc-workflows/compare/v1.5.0...v1.6.0) (2026-04-10)
 
 ### Features
