@@ -4,6 +4,7 @@ import { WizardProvider, useWizard } from './wizard/context.js';
 import { WelcomePage } from './wizard/pages/welcome.js';
 import { TemplateSelectPage } from './wizard/pages/template-select.js';
 import { WorkflowNamePage } from './wizard/pages/workflow-name.js';
+import { TriggersPage } from './wizard/pages/triggers.js';
 import { Layout } from './components/layout.js';
 
 function WizardRouter(): React.JSX.Element {
@@ -17,6 +18,8 @@ function WizardRouter(): React.JSX.Element {
       return <TemplateSelectPage />;
     case 'workflowName':
       return <WorkflowNamePage />;
+    case 'triggers':
+      return <TriggersPage />;
     default:
       return (
         <Box padding={1}>
