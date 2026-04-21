@@ -6,11 +6,7 @@ import { TriggerSelectPage } from './trigger-select.js';
 describe('TriggerSelectPage', () => {
   it('renders the title and all 5 events', () => {
     const { lastFrame } = render(
-      <TriggerSelectPage
-        initial={new Set()}
-        onCommit={() => {}}
-        onBack={() => {}}
-      />,
+      <TriggerSelectPage initial={new Set()} onCommit={() => undefined} onBack={() => undefined} />,
     );
     const frame = lastFrame() ?? '';
     expect(frame).toContain('Select triggers');
@@ -25,8 +21,8 @@ describe('TriggerSelectPage', () => {
     const { lastFrame } = render(
       <TriggerSelectPage
         initial={new Set(['push', 'pull_request'])}
-        onCommit={() => {}}
-        onBack={() => {}}
+        onCommit={() => undefined}
+        onBack={() => undefined}
       />,
     );
     const frame = lastFrame() ?? '';
@@ -36,11 +32,7 @@ describe('TriggerSelectPage', () => {
 
   it('renders keyboard hint', () => {
     const { lastFrame } = render(
-      <TriggerSelectPage
-        initial={new Set()}
-        onCommit={() => {}}
-        onBack={() => {}}
-      />,
+      <TriggerSelectPage initial={new Set()} onCommit={() => undefined} onBack={() => undefined} />,
     );
     expect(lastFrame() ?? '').toContain('Space toggles');
   });

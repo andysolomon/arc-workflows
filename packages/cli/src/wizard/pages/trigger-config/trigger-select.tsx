@@ -78,11 +78,7 @@ export function TriggerSelectPage({ initial, onCommit, onBack }: Props): React.J
           const isChecked = selected.has(evt.key);
           return (
             <Box key={evt.key}>
-              {isCursor ? (
-                <Text color="cyan">{'> '}</Text>
-              ) : (
-                <Text>{'  '}</Text>
-              )}
+              {isCursor ? <Text color="cyan">{'> '}</Text> : <Text>{'  '}</Text>}
               <Text>{`[${isChecked ? 'x' : ' '}] `}</Text>
               <Text bold={isCursor}>{evt.label}</Text>
               <Text dimColor> — {evt.description}</Text>
@@ -96,9 +92,7 @@ export function TriggerSelectPage({ initial, onCommit, onBack }: Props): React.J
         </Box>
       )}
       <Box marginTop={1}>
-        <Text dimColor>
-          Up/Down navigate, Space toggles, Enter commits, Esc back
-        </Text>
+        <Text dimColor>Up/Down navigate, Space toggles, Enter commits, Esc back</Text>
       </Box>
     </Box>
   );
