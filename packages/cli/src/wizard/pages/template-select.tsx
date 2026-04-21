@@ -39,8 +39,9 @@ export function TemplateSelectPage(): React.JSX.Element {
               ? 'Blank workflow'
               : (templates.find((t) => t.id === item)?.name ?? item);
           const isActive = i === index;
+          const colorProps = isActive ? { color: 'cyan' as const } : {};
           return (
-            <Text key={item} color={isActive ? 'cyan' : undefined}>
+            <Text key={item} {...colorProps}>
               {isActive ? '> ' : '  '}
               {label}
             </Text>
