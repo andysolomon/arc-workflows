@@ -1,3 +1,9 @@
+## [1.10.0](https://github.com/andysolomon/arc-workflows/compare/v1.9.0...v1.10.0) (2026-04-21)
+
+### Features
+
+* **cli:** add split-pane layout and live YAML preview (ARC-70) ([#20](https://github.com/andysolomon/arc-workflows/issues/20)) ([e3c6524](https://github.com/andysolomon/arc-workflows/commit/e3c6524ce011fecf17a11f8da484bf9228a86f1f))
+
 ## [1.9.0](https://github.com/andysolomon/arc-workflows/compare/v1.8.0...v1.9.0) (2026-04-21)
 
 ### Features
