@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/andysolomon/arc-workflows/compare/v1.7.0...v1.8.0) (2026-04-21)
+
+### Features
+
+* **core:** add YAML parser with trigger normalization (ARC-77) ([#17](https://github.com/andysolomon/arc-workflows/issues/17)) ([b7fcf1f](https://github.com/andysolomon/arc-workflows/commit/b7fcf1fc2ac6b57411b9ca652e1e478f26701c20))
+
 ## [1.7.0](https://github.com/andysolomon/arc-workflows/compare/v1.6.0...v1.7.0) (2026-04-14)
 
 ### Features
