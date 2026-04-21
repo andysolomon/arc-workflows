@@ -73,14 +73,7 @@ export function KeyValueList({
         }
         return;
       }
-      if (
-        key.leftArrow ||
-        key.rightArrow ||
-        key.tab ||
-        key.escape ||
-        key.meta ||
-        key.ctrl
-      ) {
+      if (key.leftArrow || key.rightArrow || key.tab || key.escape || key.meta || key.ctrl) {
         return;
       }
       if (input && input.length > 0) {
@@ -102,16 +95,8 @@ export function KeyValueList({
         const isCursor = active && i === cursor;
         return (
           <Box key={i}>
-            {isCursor ? (
-              <Text color="cyan">{'> '}</Text>
-            ) : (
-              <Text>{'  '}</Text>
-            )}
-            {row === '' ? (
-              <Text dimColor>{placeholder ?? 'KEY=VALUE'}</Text>
-            ) : (
-              <Text>{row}</Text>
-            )}
+            {isCursor ? <Text color="cyan">{'> '}</Text> : <Text>{'  '}</Text>}
+            {row === '' ? <Text dimColor>{placeholder ?? 'KEY=VALUE'}</Text> : <Text>{row}</Text>}
           </Box>
         );
       })}

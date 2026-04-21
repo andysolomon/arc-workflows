@@ -24,9 +24,7 @@ export function StringList({
   // Local row state so we can hold empty rows the user is editing. We
   // publish non-empty rows (and the currently-edited row) to the parent
   // via onChange.
-  const [rows, setRows] = useState<string[]>(() =>
-    items.length === 0 ? [''] : [...items],
-  );
+  const [rows, setRows] = useState<string[]>(() => (items.length === 0 ? [''] : [...items]));
   const [cursor, setCursor] = useState(0);
 
   function publish(next: string[]): void {
@@ -66,14 +64,7 @@ export function StringList({
         }
         return;
       }
-      if (
-        key.leftArrow ||
-        key.rightArrow ||
-        key.tab ||
-        key.escape ||
-        key.meta ||
-        key.ctrl
-      ) {
+      if (key.leftArrow || key.rightArrow || key.tab || key.escape || key.meta || key.ctrl) {
         return;
       }
       if (input && input.length > 0) {
@@ -92,16 +83,8 @@ export function StringList({
         const isCursor = active && i === cursor;
         return (
           <Box key={i}>
-            {isCursor ? (
-              <Text color="cyan">{'> '}</Text>
-            ) : (
-              <Text>{'  '}</Text>
-            )}
-            {row === '' ? (
-              <Text dimColor>{placeholder ?? '(empty)'}</Text>
-            ) : (
-              <Text>{row}</Text>
-            )}
+            {isCursor ? <Text color="cyan">{'> '}</Text> : <Text>{'  '}</Text>}
+            {row === '' ? <Text dimColor>{placeholder ?? '(empty)'}</Text> : <Text>{row}</Text>}
           </Box>
         );
       })}

@@ -6,7 +6,7 @@ import { TextField } from './text-field.js';
 describe('TextField', () => {
   it('renders the label', () => {
     const { lastFrame } = render(
-      <TextField label="Name" value="" onChange={() => {}} placeholder="e.g. CI" />,
+      <TextField label="Name" value="" onChange={() => undefined} placeholder="e.g. CI" />,
     );
     const frame = lastFrame() ?? '';
     expect(frame).toContain('Name');
@@ -15,14 +15,14 @@ describe('TextField', () => {
 
   it('renders the current value when non-empty', () => {
     const { lastFrame } = render(
-      <TextField label="Name" value="hello" onChange={() => {}} />,
+      <TextField label="Name" value="hello" onChange={() => undefined} />,
     );
     expect(lastFrame() ?? '').toContain('hello');
   });
 
   it('renders an error when provided', () => {
     const { lastFrame } = render(
-      <TextField label="Name" value="" onChange={() => {}} error="Required" />,
+      <TextField label="Name" value="" onChange={() => undefined} error="Required" />,
     );
     expect(lastFrame() ?? '').toContain('Required');
   });

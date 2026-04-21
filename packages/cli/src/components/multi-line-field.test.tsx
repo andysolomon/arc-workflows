@@ -9,7 +9,7 @@ describe('MultiLineField', () => {
       <MultiLineField
         label="Description"
         value=""
-        onChange={() => {}}
+        onChange={() => undefined}
         placeholder="Enter text"
       />,
     );
@@ -20,7 +20,7 @@ describe('MultiLineField', () => {
 
   it('renders multi-line values across multiple rows', () => {
     const { lastFrame } = render(
-      <MultiLineField label="Body" value={'first\nsecond'} onChange={() => {}} />,
+      <MultiLineField label="Body" value={'first\nsecond'} onChange={() => undefined} />,
     );
     const frame = lastFrame() ?? '';
     expect(frame).toContain('first');
@@ -30,12 +30,7 @@ describe('MultiLineField', () => {
   it('does not capture input when inactive', () => {
     const onChange = vi.fn();
     const { stdin } = render(
-      <MultiLineField
-        label="Body"
-        value="foo"
-        onChange={onChange}
-        active={false}
-      />,
+      <MultiLineField label="Body" value="foo" onChange={onChange} active={false} />,
     );
     stdin.write('x');
     expect(onChange).not.toHaveBeenCalled();
