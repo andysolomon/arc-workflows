@@ -4,6 +4,7 @@ import { WizardProvider, useWizard } from './wizard/context.js';
 import { WelcomePage } from './wizard/pages/welcome.js';
 import { TemplateSelectPage } from './wizard/pages/template-select.js';
 import { WorkflowNamePage } from './wizard/pages/workflow-name.js';
+import { Layout } from './components/layout.js';
 
 function WizardRouter(): React.JSX.Element {
   const [state] = useWizard();
@@ -28,7 +29,9 @@ function WizardRouter(): React.JSX.Element {
 export function App(): React.JSX.Element {
   return (
     <WizardProvider>
-      <WizardRouter />
+      <Layout>
+        <WizardRouter />
+      </Layout>
     </WizardProvider>
   );
 }
