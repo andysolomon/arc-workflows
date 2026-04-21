@@ -1,3 +1,9 @@
+## [1.9.0](https://github.com/andysolomon/arc-workflows/compare/v1.8.0...v1.9.0) (2026-04-21)
+
+### Features
+
+* **cli:** add welcome, template-select, and workflow-name wizard pages (ARC-71) ([#19](https://github.com/andysolomon/arc-workflows/issues/19)) ([b72e86d](https://github.com/andysolomon/arc-workflows/commit/b72e86d025279a795c765f5086d4e3ac132f09f9))
+
 ## [1.8.0](https://github.com/andysolomon/arc-workflows/compare/v1.7.0...v1.8.0) (2026-04-21)
 
 ### Features
