@@ -5,4 +5,5 @@ export interface WizardContext {
   currentJobId: string | null;
   currentStepIndex: number | null;
   templateId: string | null;
+  outputPath: string | null;
 }

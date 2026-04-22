@@ -28,8 +28,24 @@ describe('wizard state machine', () => {
     actor.send({ type: 'NEXT' }); // -> triggers
     actor.send({ type: 'NEXT' }); // -> jobs
     actor.send({ type: 'NEXT' }); // -> confirm
-    actor.send({ type: 'CONFIRM' }); // -> done
+    actor.send({ type: 'CONFIRM', outputPath: '.github/workflows/ci.yml' }); // -> done
     expect(actor.getSnapshot().value).toBe('done');
+    expect(actor.getSnapshot().context.outputPath).toBe('.github/workflows/ci.yml');
+    actor.stop();
+  });
+
+  it('CONFIRM stores outputPath in context', () => {
+    const actor = createActor(wizardMachine);
+    actor.start();
+    actor.send({ type: 'SELECT_CREATE' });
+    actor.send({ type: 'SELECT_BLANK' });
+    actor.send({ type: 'NEXT' }); // -> triggers
+    actor.send({ type: 'NEXT' }); // -> jobs
+    actor.send({ type: 'NEXT' }); // -> confirm
+    expect(actor.getSnapshot().context.outputPath).toBeNull();
+    actor.send({ type: 'CONFIRM', outputPath: '/tmp/my-workflow.yml' });
+    expect(actor.getSnapshot().value).toBe('done');
+    expect(actor.getSnapshot().context.outputPath).toBe('/tmp/my-workflow.yml');
     actor.stop();
   });
 

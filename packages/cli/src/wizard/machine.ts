@@ -20,7 +20,7 @@ export const wizardMachine = setup({
       | { type: 'REMOVE_STEP'; jobId: string; stepIndex: number }
       | { type: 'NEXT' }
       | { type: 'BACK' }
-      | { type: 'CONFIRM' },
+      | { type: 'CONFIRM'; outputPath: string },
   },
 }).createMachine({
   id: 'wizard',
@@ -30,6 +30,7 @@ export const wizardMachine = setup({
     currentJobId: null,
     currentStepIndex: null,
     templateId: null,
+    outputPath: null,
   },
   states: {
     welcome: {
@@ -189,7 +190,12 @@ export const wizardMachine = setup({
     },
     confirm: {
       on: {
-        CONFIRM: 'done',
+        CONFIRM: {
+          target: 'done',
+          actions: assign({
+            outputPath: ({ event }) => event.outputPath,
+          }),
+        },
         BACK: 'jobs',
       },
     },
