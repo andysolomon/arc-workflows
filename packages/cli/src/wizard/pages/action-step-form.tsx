@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import type { ActionStep } from '@arc-workflows/core';
+import { COMMON_ACTIONS, type ActionStep, type CommonAction } from '@arc-workflows/core';
 import { TextField } from '../../components/text-field.js';
 import { KeyValueList } from '../../components/key-value-list.js';
 import { NumberField } from '../../components/number-field.js';
+import { SuggestionBox } from '../../components/suggestion-box.js';
+import { matchExpressionContexts } from '../../lib/expression-autocomplete.js';
 
 type Position =
   | 'name'
@@ -53,6 +55,16 @@ interface Props {
  * `uses`). Tab cycles between fields; Enter on Done commits; Esc goes
  * back. `uses` is required; submitting with an empty `uses` keeps the
  * field focused and surfaces a local error message.
+ *
+ * Two autocompletes are wired here:
+ *
+ *   - Typing in `uses` shows a dropdown of matching common actions
+ *     from `COMMON_ACTIONS` (substring on name + tags). Selecting a
+ *     row replaces `uses` with `name@version`.
+ *   - Typing an unclosed `${{` in a `with` or `env` value shows the
+ *     12 expression contexts. Because the parent doesn't own the
+ *     KeyValueList's row text, the suggestion is informational: the
+ *     user sees valid contexts and types them out manually.
  */
 export function ActionStepForm({ initial, onCommit, onBack }: Props): React.JSX.Element {
   const [fields, setFields] = useState<Fields>(() => initialFields(initial));
@@ -60,6 +72,15 @@ export function ActionStepForm({ initial, onCommit, onBack }: Props): React.JSX.
   const [error, setError] = useState('');
 
   const current: Position = POSITIONS[focusIndex] ?? 'done';
+
+  // Action-picker state (uses field).
+  const [matchedActions, setMatchedActions] = useState<CommonAction[]>([]);
+  const [actionSuggestionsDismissed, setActionSuggestionsDismissed] = useState(false);
+
+  // Expression-autocomplete state (with + env fields).
+  const [exprMatches, setExprMatches] = useState<readonly string[]>([]);
+  const [exprField, setExprField] = useState<'with' | 'env' | null>(null);
+  const [exprDismissed, setExprDismissed] = useState(false);
 
   useInput((_input, key) => {
     if (key.tab) {
@@ -85,6 +106,42 @@ export function ActionStepForm({ initial, onCommit, onBack }: Props): React.JSX.
       onCommit(buildActionStep(fields));
     }
   });
+
+  function handleUsesChange(next: string): void {
+    setFields((f) => ({ ...f, uses: next }));
+    setActionSuggestionsDismissed(false);
+
+    const q = next.toLowerCase().trim();
+    if (q === '') {
+      setMatchedActions([]);
+      return;
+    }
+    const matches = COMMON_ACTIONS.filter(
+      (a) => a.name.toLowerCase().includes(q) || a.tags.some((t) => t.toLowerCase().includes(q)),
+    ).slice(0, 10);
+    setMatchedActions(matches);
+  }
+
+  function handleExprRow(fieldKey: 'with' | 'env', rowValue: string): void {
+    setExprDismissed(false);
+    const matches = matchExpressionContexts(rowValue);
+    if (matches.length > 0) {
+      setExprMatches(matches);
+      setExprField(fieldKey);
+    } else {
+      setExprMatches([]);
+      setExprField(null);
+    }
+  }
+
+  const showActionSuggestions =
+    current === 'uses' && matchedActions.length > 0 && !actionSuggestionsDismissed;
+
+  const showWithExprSuggestions =
+    current === 'with' && exprField === 'with' && exprMatches.length > 0 && !exprDismissed;
+
+  const showEnvExprSuggestions =
+    current === 'env' && exprField === 'env' && exprMatches.length > 0 && !exprDismissed;
 
   return (
     <Box flexDirection="column">
@@ -115,31 +172,71 @@ export function ActionStepForm({ initial, onCommit, onBack }: Props): React.JSX.
           active={current === 'if'}
         />
       </Box>
-      <Box marginTop={1}>
+      <Box marginTop={1} flexDirection="column">
         <TextField
           label="uses (required)"
           value={fields.uses}
-          onChange={(v) => setFields((f) => ({ ...f, uses: v }))}
-          active={current === 'uses'}
+          onChange={handleUsesChange}
+          active={current === 'uses' && !showActionSuggestions}
           placeholder="actions/checkout@v4"
         />
+        <SuggestionBox
+          items={matchedActions}
+          getLabel={(a) => `${a.name}@${a.version}`}
+          getDescription={(a) => a.description}
+          onSelect={(a) => {
+            setFields((f) => ({ ...f, uses: `${a.name}@${a.version}` }));
+            setMatchedActions([]);
+            setActionSuggestionsDismissed(true);
+          }}
+          onDismiss={() => setActionSuggestionsDismissed(true)}
+          active={showActionSuggestions}
+        />
       </Box>
-      <Box marginTop={1}>
+      <Box marginTop={1} flexDirection="column">
         <KeyValueList
           label="with"
           entries={fields.withMap}
           onChange={(e) => setFields((f) => ({ ...f, withMap: e }))}
-          active={current === 'with'}
+          onCurrentValueChange={(v) => handleExprRow('with', v)}
+          active={current === 'with' && !showWithExprSuggestions}
           placeholder="node-version=20"
         />
+        <SuggestionBox
+          items={exprField === 'with' ? exprMatches : []}
+          getLabel={(s) => s}
+          onSelect={() => {
+            setExprDismissed(true);
+            setExprField(null);
+          }}
+          onDismiss={() => {
+            setExprDismissed(true);
+            setExprField(null);
+          }}
+          active={showWithExprSuggestions}
+        />
       </Box>
-      <Box marginTop={1}>
+      <Box marginTop={1} flexDirection="column">
         <KeyValueList
           label="env"
           entries={fields.env}
           onChange={(e) => setFields((f) => ({ ...f, env: e }))}
-          active={current === 'env'}
+          onCurrentValueChange={(v) => handleExprRow('env', v)}
+          active={current === 'env' && !showEnvExprSuggestions}
           placeholder="NODE_ENV=production"
+        />
+        <SuggestionBox
+          items={exprField === 'env' ? exprMatches : []}
+          getLabel={(s) => s}
+          onSelect={() => {
+            setExprDismissed(true);
+            setExprField(null);
+          }}
+          onDismiss={() => {
+            setExprDismissed(true);
+            setExprField(null);
+          }}
+          active={showEnvExprSuggestions}
         />
       </Box>
 

@@ -28,4 +28,18 @@ describe('KeyValueList', () => {
     stdin.write('A');
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it('accepts an optional onCurrentValueChange callback without crashing', () => {
+    const onCurrentValueChange = vi.fn();
+    const { lastFrame } = render(
+      <KeyValueList
+        label="env"
+        entries={{ NODE_ENV: 'production' }}
+        onChange={() => undefined}
+        onCurrentValueChange={onCurrentValueChange}
+      />,
+    );
+    // The component renders as before; the new prop is additive.
+    expect(lastFrame() ?? '').toContain('NODE_ENV=production');
+  });
 });
