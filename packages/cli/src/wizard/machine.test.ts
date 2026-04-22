@@ -134,4 +134,131 @@ describe('wizard state machine', () => {
     expect(actor.getSnapshot().context.templateId).toBeNull();
     actor.stop();
   });
+
+  it('REMOVE_JOB removes a job from workflow.jobs', () => {
+    const actor = createActor(wizardMachine);
+    actor.start();
+    actor.send({ type: 'SELECT_CREATE' });
+    actor.send({ type: 'SELECT_BLANK' });
+    actor.send({ type: 'NEXT' }); // -> triggers
+    actor.send({ type: 'NEXT' }); // -> jobs
+    actor.send({
+      type: 'ADD_JOB',
+      id: 'build',
+      job: { 'runs-on': 'ubuntu-latest', steps: [] },
+    });
+    actor.send({
+      type: 'ADD_JOB',
+      id: 'test',
+      job: { 'runs-on': 'ubuntu-latest', steps: [] },
+    });
+    expect(Object.keys(actor.getSnapshot().context.workflow.jobs ?? {})).toEqual([
+      'build',
+      'test',
+    ]);
+    actor.send({ type: 'REMOVE_JOB', id: 'build' });
+    expect(Object.keys(actor.getSnapshot().context.workflow.jobs ?? {})).toEqual(['test']);
+    actor.stop();
+  });
+
+  it('REMOVE_JOB is a no-op for an unknown job id', () => {
+    const actor = createActor(wizardMachine);
+    actor.start();
+    actor.send({ type: 'SELECT_CREATE' });
+    actor.send({ type: 'SELECT_BLANK' });
+    actor.send({ type: 'NEXT' }); // -> triggers
+    actor.send({ type: 'NEXT' }); // -> jobs
+    actor.send({
+      type: 'ADD_JOB',
+      id: 'build',
+      job: { 'runs-on': 'ubuntu-latest', steps: [] },
+    });
+    actor.send({ type: 'REMOVE_JOB', id: 'nope' });
+    expect(Object.keys(actor.getSnapshot().context.workflow.jobs ?? {})).toEqual(['build']);
+    actor.stop();
+  });
+
+  it('UPDATE_STEP replaces a step at the given index', () => {
+    const actor = createActor(wizardMachine);
+    actor.start();
+    actor.send({ type: 'SELECT_CREATE' });
+    actor.send({ type: 'SELECT_BLANK' });
+    actor.send({ type: 'NEXT' }); // -> triggers
+    actor.send({ type: 'NEXT' }); // -> jobs
+    actor.send({
+      type: 'ADD_JOB',
+      id: 'build',
+      job: {
+        'runs-on': 'ubuntu-latest',
+        steps: [{ run: 'echo one' }, { run: 'echo two' }],
+      },
+    });
+    actor.send({ type: 'EDIT_JOB', id: 'build' }); // -> jobConfig
+    actor.send({ type: 'NEXT' }); // -> steps
+    actor.send({
+      type: 'UPDATE_STEP',
+      jobId: 'build',
+      stepIndex: 1,
+      step: { run: 'echo updated' },
+    });
+    const job = actor.getSnapshot().context.workflow.jobs?.build;
+    expect(job).toBeDefined();
+    if (job && 'steps' in job && job.steps) {
+      expect(job.steps[1]).toEqual({ run: 'echo updated' });
+    }
+    actor.stop();
+  });
+
+  it('REMOVE_STEP removes a step at the given index', () => {
+    const actor = createActor(wizardMachine);
+    actor.start();
+    actor.send({ type: 'SELECT_CREATE' });
+    actor.send({ type: 'SELECT_BLANK' });
+    actor.send({ type: 'NEXT' }); // -> triggers
+    actor.send({ type: 'NEXT' }); // -> jobs
+    actor.send({
+      type: 'ADD_JOB',
+      id: 'build',
+      job: {
+        'runs-on': 'ubuntu-latest',
+        steps: [{ run: 'echo one' }, { run: 'echo two' }, { run: 'echo three' }],
+      },
+    });
+    actor.send({ type: 'EDIT_JOB', id: 'build' }); // -> jobConfig
+    actor.send({ type: 'NEXT' }); // -> steps
+    actor.send({ type: 'REMOVE_STEP', jobId: 'build', stepIndex: 1 });
+    const job = actor.getSnapshot().context.workflow.jobs?.build;
+    expect(job).toBeDefined();
+    if (job && 'steps' in job && job.steps) {
+      expect(job.steps).toHaveLength(2);
+      expect(job.steps[0]).toEqual({ run: 'echo one' });
+      expect(job.steps[1]).toEqual({ run: 'echo three' });
+    }
+    actor.stop();
+  });
+
+  it('REMOVE_STEP is a no-op for an unknown job', () => {
+    const actor = createActor(wizardMachine);
+    actor.start();
+    actor.send({ type: 'SELECT_CREATE' });
+    actor.send({ type: 'SELECT_BLANK' });
+    actor.send({ type: 'NEXT' }); // -> triggers
+    actor.send({ type: 'NEXT' }); // -> jobs
+    actor.send({
+      type: 'ADD_JOB',
+      id: 'build',
+      job: {
+        'runs-on': 'ubuntu-latest',
+        steps: [{ run: 'echo one' }],
+      },
+    });
+    actor.send({ type: 'EDIT_JOB', id: 'build' });
+    actor.send({ type: 'NEXT' }); // -> steps
+    actor.send({ type: 'REMOVE_STEP', jobId: 'ghost', stepIndex: 0 });
+    const job = actor.getSnapshot().context.workflow.jobs?.build;
+    if (job && 'steps' in job && job.steps) {
+      expect(job.steps).toHaveLength(1);
+    }
+    actor.stop();
+  });
 });
