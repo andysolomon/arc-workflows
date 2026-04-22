@@ -5,28 +5,24 @@ import { StepsPage } from './steps.js';
 import { WizardProvider, useWizard } from '../context.js';
 import type { Step } from '@arc-workflows/core';
 
-function PrimedSteps({
-  jobId,
-  steps,
-}: {
-  jobId: string;
-  steps: Step[];
-}): React.JSX.Element {
+function PrimedSteps({ jobId, steps }: { jobId: string; steps: Step[] }): React.JSX.Element {
   const [state, send] = useWizard();
+  const sendRef = React.useRef(send);
+  sendRef.current = send;
   React.useEffect(() => {
-    send({ type: 'SELECT_CREATE' });
-    send({ type: 'SELECT_BLANK' });
-    send({ type: 'NEXT' }); // -> triggers
-    send({ type: 'NEXT' }); // -> jobs
-    send({
+    const s = sendRef.current;
+    s({ type: 'SELECT_CREATE' });
+    s({ type: 'SELECT_BLANK' });
+    s({ type: 'NEXT' }); // -> triggers
+    s({ type: 'NEXT' }); // -> jobs
+    s({
       type: 'ADD_JOB',
       id: jobId,
       job: { 'runs-on': 'ubuntu-latest', steps },
     });
-    send({ type: 'EDIT_JOB', id: jobId }); // -> jobConfig
-    send({ type: 'NEXT' }); // -> steps
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    s({ type: 'EDIT_JOB', id: jobId }); // -> jobConfig
+    s({ type: 'NEXT' }); // -> steps
+  }, [jobId, steps]);
 
   if (state.value !== 'steps') return <></>;
   return <StepsPage />;
@@ -55,10 +51,7 @@ describe('StepsPage', () => {
   it('renders step summaries for existing steps', async () => {
     const { lastFrame } = render(
       <WizardProvider>
-        <PrimedSteps
-          jobId="build"
-          steps={[{ uses: 'actions/checkout@v4' }, { run: 'npm test' }]}
-        />
+        <PrimedSteps jobId="build" steps={[{ uses: 'actions/checkout@v4' }, { run: 'npm test' }]} />
       </WizardProvider>,
     );
     await tick();

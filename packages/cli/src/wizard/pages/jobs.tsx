@@ -72,16 +72,12 @@ export function JobsPage(): React.JSX.Element {
           </Box>
         )}
         {jobIds.map((id, i) => {
-          const job = jobs[id] as Job | undefined;
+          const job = jobs[id];
           const isCursor = i === cursor;
           return (
             <Box key={id}>
               {isCursor ? <Text color="cyan">{'> '}</Text> : <Text>{'  '}</Text>}
-              {isCursor ? (
-                <Text bold>{id}</Text>
-              ) : (
-                <Text>{id}</Text>
-              )}
+              {isCursor ? <Text bold>{id}</Text> : <Text>{id}</Text>}
               <Text dimColor>{`  ${summarizeJob(job)}`}</Text>
             </Box>
           );
@@ -95,11 +91,7 @@ export function JobsPage(): React.JSX.Element {
         )}
       </Box>
       <Box>
-        {cursor === doneIndex ? (
-          <Text color="cyan">{'> [Done]'}</Text>
-        ) : (
-          <Text>{'  [Done]'}</Text>
-        )}
+        {cursor === doneIndex ? <Text color="cyan">{'> [Done]'}</Text> : <Text>{'  [Done]'}</Text>}
       </Box>
     </Box>
   );

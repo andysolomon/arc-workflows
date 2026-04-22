@@ -88,11 +88,7 @@ export function StepsPage(): React.JSX.Element {
         )}
       </Box>
       <Box>
-        {cursor === doneIndex ? (
-          <Text color="cyan">{'> [Done]'}</Text>
-        ) : (
-          <Text>{'  [Done]'}</Text>
-        )}
+        {cursor === doneIndex ? <Text color="cyan">{'> [Done]'}</Text> : <Text>{'  [Done]'}</Text>}
       </Box>
     </Box>
   );

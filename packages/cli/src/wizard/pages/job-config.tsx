@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import type { Job, NormalJob, Permissions, PermissionScope, PermissionValue } from '@arc-workflows/core';
+import type {
+  Job,
+  NormalJob,
+  Permissions,
+  PermissionScope,
+  PermissionValue,
+} from '@arc-workflows/core';
 import { useWizard } from '../context.js';
 import { TextField } from '../../components/text-field.js';
 import { StringList } from '../../components/string-list.js';
@@ -153,16 +159,8 @@ export function JobConfigPage(): React.JSX.Element {
           const focused = current() === 'permMode';
           return (
             <Box key={opt.mode}>
-              {selected ? <Text>{'('}</Text> : <Text>{' '}</Text>}
-              {selected ? (
-                focused ? (
-                  <Text color="cyan">*</Text>
-                ) : (
-                  <Text>*</Text>
-                )
-              ) : (
-                <Text> </Text>
-              )}
+              {selected ? <Text>{'('}</Text> : <Text> </Text>}
+              {selected ? focused ? <Text color="cyan">*</Text> : <Text>*</Text> : <Text> </Text>}
               {selected ? <Text>{') '}</Text> : <Text>{'  '}</Text>}
               {selected && focused ? (
                 <Text color="cyan" bold>
@@ -210,11 +208,7 @@ export function JobConfigPage(): React.JSX.Element {
       </Box>
 
       <Box marginTop={1}>
-        {current() === 'done' ? (
-          <Text color="cyan">{'> [Done]'}</Text>
-        ) : (
-          <Text>{'  [Done]'}</Text>
-        )}
+        {current() === 'done' ? <Text color="cyan">{'> [Done]'}</Text> : <Text>{'  [Done]'}</Text>}
       </Box>
     </Box>
   );
@@ -255,11 +249,7 @@ function prevPermMode(mode: PermMode): PermMode {
 
 function initialFieldState(job: NormalJob | undefined): FieldState {
   const needs =
-    job?.needs === undefined
-      ? []
-      : Array.isArray(job.needs)
-        ? [...job.needs]
-        : [job.needs];
+    job?.needs === undefined ? [] : Array.isArray(job.needs) ? [...job.needs] : [job.needs];
 
   const { permMode, customPerms } = initialPermState(job?.permissions);
 

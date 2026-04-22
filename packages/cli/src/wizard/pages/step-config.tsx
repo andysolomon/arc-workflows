@@ -29,15 +29,9 @@ export function StepConfigPage(): React.JSX.Element {
   const jobs = state.context.workflow.jobs ?? {};
   const job: Job | undefined = jobs[jobId];
   const step: Step | undefined =
-    job && 'steps' in job && stepIndex !== null
-      ? (job as NormalJob).steps[stepIndex]
-      : undefined;
+    job && 'steps' in job && stepIndex !== null ? (job as NormalJob).steps[stepIndex] : undefined;
 
-  const initialKind: StepKind | null = step
-    ? isActionStep(step)
-      ? 'action'
-      : 'run'
-    : null;
+  const initialKind: StepKind | null = step ? (isActionStep(step) ? 'action' : 'run') : null;
 
   const [kind, setKind] = useState<StepKind | null>(() => {
     if (!step) return null;
@@ -109,13 +103,11 @@ export function StepConfigPage(): React.JSX.Element {
   }
 
   if (kind === 'action') {
-    const actionInitial: ActionStep = isActionStep(step)
-      ? step
-      : { uses: '' };
+    const actionInitial: ActionStep = isActionStep(step) ? step : { uses: '' };
     return <ActionStepForm initial={actionInitial} onCommit={onCommit} onBack={onBack} />;
   }
 
   // kind === 'run'
-  const runInitial: RunStep = !isActionStep(step) ? (step as RunStep) : { run: '' };
+  const runInitial: RunStep = !isActionStep(step) ? step : { run: '' };
   return <RunStepForm initial={runInitial} onCommit={onCommit} onBack={onBack} />;
 }

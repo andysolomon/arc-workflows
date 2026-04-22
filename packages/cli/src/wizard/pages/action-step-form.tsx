@@ -146,11 +146,7 @@ export function ActionStepForm({ initial, onCommit, onBack }: Props): React.JSX.
       <Box marginTop={1} flexDirection="column">
         <Text bold>continue-on-error</Text>
         <Box>
-          {current === 'continueOnError' ? (
-            <Text color="cyan">{'> '}</Text>
-          ) : (
-            <Text>{'  '}</Text>
-          )}
+          {current === 'continueOnError' ? <Text color="cyan">{'> '}</Text> : <Text>{'  '}</Text>}
           <Text>{fields.continueOnError ? 'true' : 'false'}</Text>
         </Box>
         {current === 'continueOnError' && <Text dimColor>Left/Right to toggle</Text>}
@@ -182,11 +178,7 @@ export function ActionStepForm({ initial, onCommit, onBack }: Props): React.JSX.
       )}
 
       <Box marginTop={1}>
-        {current === 'done' ? (
-          <Text color="cyan">{'> [Done]'}</Text>
-        ) : (
-          <Text>{'  [Done]'}</Text>
-        )}
+        {current === 'done' ? <Text color="cyan">{'> [Done]'}</Text> : <Text>{'  [Done]'}</Text>}
       </Box>
     </Box>
   );

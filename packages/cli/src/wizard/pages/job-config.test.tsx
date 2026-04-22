@@ -16,27 +16,28 @@ function PrimedJobConfig({
   extras?: boolean;
 }): React.JSX.Element {
   const [state, send] = useWizard();
+  const sendRef = React.useRef(send);
+  sendRef.current = send;
   React.useEffect(() => {
-    send({ type: 'SELECT_CREATE' });
-    send({ type: 'SELECT_BLANK' });
-    send({ type: 'NEXT' }); // -> triggers
-    send({ type: 'NEXT' }); // -> jobs
-    send({
+    const s = sendRef.current;
+    s({ type: 'SELECT_CREATE' });
+    s({ type: 'SELECT_BLANK' });
+    s({ type: 'NEXT' }); // -> triggers
+    s({ type: 'NEXT' }); // -> jobs
+    s({
       type: 'ADD_JOB',
       id: jobId,
       job: { 'runs-on': 'ubuntu-latest', steps: [] },
     });
     if (extras) {
-      send({
+      s({
         type: 'ADD_JOB',
         id: 'other',
         job: { 'runs-on': 'ubuntu-latest', steps: [] },
       });
     }
-    send({ type: 'EDIT_JOB', id: jobId });
-    // run once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    s({ type: 'EDIT_JOB', id: jobId });
+  }, [jobId, extras]);
   if (state.value !== 'jobConfig') return <></>;
   return <JobConfigPage />;
 }

@@ -6,11 +6,7 @@ import { RunStepForm } from './run-step-form.js';
 describe('RunStepForm', () => {
   it('renders all run-step fields', () => {
     const { lastFrame } = render(
-      <RunStepForm
-        initial={{ run: '' }}
-        onCommit={() => undefined}
-        onBack={() => undefined}
-      />,
+      <RunStepForm initial={{ run: '' }} onCommit={() => undefined} onBack={() => undefined} />,
     );
     const frame = lastFrame() ?? '';
     expect(frame).toContain('Configure run step');
@@ -28,11 +24,7 @@ describe('RunStepForm', () => {
 
   it('shows the shell hint', () => {
     const { lastFrame } = render(
-      <RunStepForm
-        initial={{ run: '' }}
-        onCommit={() => undefined}
-        onBack={() => undefined}
-      />,
+      <RunStepForm initial={{ run: '' }} onCommit={() => undefined} onBack={() => undefined} />,
     );
     const frame = lastFrame() ?? '';
     expect(frame).toContain('bash');

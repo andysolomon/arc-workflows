@@ -152,10 +152,7 @@ describe('wizard state machine', () => {
       id: 'test',
       job: { 'runs-on': 'ubuntu-latest', steps: [] },
     });
-    expect(Object.keys(actor.getSnapshot().context.workflow.jobs ?? {})).toEqual([
-      'build',
-      'test',
-    ]);
+    expect(Object.keys(actor.getSnapshot().context.workflow.jobs ?? {})).toEqual(['build', 'test']);
     actor.send({ type: 'REMOVE_JOB', id: 'build' });
     expect(Object.keys(actor.getSnapshot().context.workflow.jobs ?? {})).toEqual(['test']);
     actor.stop();

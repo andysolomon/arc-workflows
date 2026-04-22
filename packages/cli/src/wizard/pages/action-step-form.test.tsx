@@ -6,11 +6,7 @@ import { ActionStepForm } from './action-step-form.js';
 describe('ActionStepForm', () => {
   it('renders all action-step fields', () => {
     const { lastFrame } = render(
-      <ActionStepForm
-        initial={{ uses: '' }}
-        onCommit={() => undefined}
-        onBack={() => undefined}
-      />,
+      <ActionStepForm initial={{ uses: '' }} onCommit={() => undefined} onBack={() => undefined} />,
     );
     const frame = lastFrame() ?? '';
     expect(frame).toContain('Configure action step');

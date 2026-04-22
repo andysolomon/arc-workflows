@@ -5,29 +5,25 @@ import { StepConfigPage } from './step-config.js';
 import { WizardProvider, useWizard } from '../context.js';
 import type { Step } from '@arc-workflows/core';
 
-function PrimedStepConfig({
-  jobId,
-  step,
-}: {
-  jobId: string;
-  step: Step;
-}): React.JSX.Element {
+function PrimedStepConfig({ jobId, step }: { jobId: string; step: Step }): React.JSX.Element {
   const [state, send] = useWizard();
+  const sendRef = React.useRef(send);
+  sendRef.current = send;
   React.useEffect(() => {
-    send({ type: 'SELECT_CREATE' });
-    send({ type: 'SELECT_BLANK' });
-    send({ type: 'NEXT' }); // -> triggers
-    send({ type: 'NEXT' }); // -> jobs
-    send({
+    const s = sendRef.current;
+    s({ type: 'SELECT_CREATE' });
+    s({ type: 'SELECT_BLANK' });
+    s({ type: 'NEXT' }); // -> triggers
+    s({ type: 'NEXT' }); // -> jobs
+    s({
       type: 'ADD_JOB',
       id: jobId,
       job: { 'runs-on': 'ubuntu-latest', steps: [step] },
     });
-    send({ type: 'EDIT_JOB', id: jobId }); // -> jobConfig
-    send({ type: 'NEXT' }); // -> steps
-    send({ type: 'EDIT_STEP', index: 0 }); // -> stepConfig
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    s({ type: 'EDIT_JOB', id: jobId }); // -> jobConfig
+    s({ type: 'NEXT' }); // -> steps
+    s({ type: 'EDIT_STEP', index: 0 }); // -> stepConfig
+  }, [jobId, step]);
   if (state.value !== 'stepConfig') return <></>;
   return <StepConfigPage />;
 }
