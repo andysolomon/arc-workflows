@@ -1,3 +1,9 @@
+## [1.14.0](https://github.com/andysolomon/arc-workflows/compare/v1.13.0...v1.14.0) (2026-04-22)
+
+### Features
+
+* **cli:** add action picker + expression autocomplete (ARC-75) ([#24](https://github.com/andysolomon/arc-workflows/issues/24)) ([d3002e8](https://github.com/andysolomon/arc-workflows/commit/d3002e81c6dd6ace80da013ca4ed0ae275a3edd7))
+
 ## [1.13.0](https://github.com/andysolomon/arc-workflows/compare/v1.12.0...v1.13.0) (2026-04-22)
 
 ### Features
