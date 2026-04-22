@@ -1,3 +1,9 @@
+## [1.11.0](https://github.com/andysolomon/arc-workflows/compare/v1.10.0...v1.11.0) (2026-04-22)
+
+### Features
+
+* **cli:** add trigger selection and configuration pages + shared form components (ARC-72) ([#21](https://github.com/andysolomon/arc-workflows/issues/21)) ([e7b5db2](https://github.com/andysolomon/arc-workflows/commit/e7b5db263dbd4ace6a292cc1a2740ffdce6877db))
+
 ## [1.10.0](https://github.com/andysolomon/arc-workflows/compare/v1.9.0...v1.10.0) (2026-04-21)
 
 ### Features
