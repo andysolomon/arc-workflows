@@ -5,6 +5,8 @@ import { TextField } from '../../components/text-field.js';
 import { MultiLineField } from '../../components/multi-line-field.js';
 import { KeyValueList } from '../../components/key-value-list.js';
 import { NumberField } from '../../components/number-field.js';
+import { SuggestionBox } from '../../components/suggestion-box.js';
+import { matchExpressionContexts } from '../../lib/expression-autocomplete.js';
 
 type Position =
   | 'name'
@@ -54,6 +56,11 @@ interface Props {
  * `run`). The `run` field is a MultiLineField; all other fields follow
  * the same single-TextField/KV/toggle/number/done pattern as the
  * action form.
+ *
+ * The `env` field shows an expression-context dropdown whenever the
+ * user is inside an unclosed `${{`. Because the KeyValueList owns
+ * its row state internally, the dropdown is informational (listing
+ * valid contexts); the user types the closing `}}` manually.
  */
 export function RunStepForm({ initial, onCommit, onBack }: Props): React.JSX.Element {
   const [fields, setFields] = useState<Fields>(() => initialFields(initial));
@@ -61,6 +68,9 @@ export function RunStepForm({ initial, onCommit, onBack }: Props): React.JSX.Ele
   const [error, setError] = useState('');
 
   const current: Position = POSITIONS[focusIndex] ?? 'done';
+
+  const [exprMatches, setExprMatches] = useState<readonly string[]>([]);
+  const [exprDismissed, setExprDismissed] = useState(false);
 
   useInput((_input, key) => {
     if (key.tab) {
@@ -86,6 +96,15 @@ export function RunStepForm({ initial, onCommit, onBack }: Props): React.JSX.Ele
       onCommit(buildRunStep(fields));
     }
   });
+
+  function handleEnvRow(rowValue: string): void {
+    setExprDismissed(false);
+    const matches = matchExpressionContexts(rowValue);
+    setExprMatches(matches);
+  }
+
+  const showExprSuggestions =
+    current === 'env' && exprMatches.length > 0 && !exprDismissed;
 
   return (
     <Box flexDirection="column">
@@ -135,13 +154,21 @@ export function RunStepForm({ initial, onCommit, onBack }: Props): React.JSX.Ele
         />
         <Text dimColor>Common: bash, sh, pwsh, python</Text>
       </Box>
-      <Box marginTop={1}>
+      <Box marginTop={1} flexDirection="column">
         <KeyValueList
           label="env"
           entries={fields.env}
           onChange={(e) => setFields((f) => ({ ...f, env: e }))}
-          active={current === 'env'}
+          onCurrentValueChange={handleEnvRow}
+          active={current === 'env' && !showExprSuggestions}
           placeholder="NODE_ENV=production"
+        />
+        <SuggestionBox
+          items={exprMatches}
+          getLabel={(s) => s}
+          onSelect={() => setExprDismissed(true)}
+          onDismiss={() => setExprDismissed(true)}
+          active={showExprSuggestions}
         />
       </Box>
 
