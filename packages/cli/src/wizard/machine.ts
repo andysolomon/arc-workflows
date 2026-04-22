@@ -13,8 +13,11 @@ export const wizardMachine = setup({
       | { type: 'CONFIGURE_TRIGGERS'; triggers: Triggers }
       | { type: 'ADD_JOB'; id: string; job: NormalJob }
       | { type: 'EDIT_JOB'; id: string }
+      | { type: 'REMOVE_JOB'; id: string }
       | { type: 'ADD_STEP'; step: Step }
       | { type: 'EDIT_STEP'; index: number }
+      | { type: 'UPDATE_STEP'; jobId: string; stepIndex: number; step: Step }
+      | { type: 'REMOVE_STEP'; jobId: string; stepIndex: number }
       | { type: 'NEXT' }
       | { type: 'BACK' }
       | { type: 'CONFIRM' },
@@ -92,6 +95,16 @@ export const wizardMachine = setup({
           target: 'jobConfig',
           actions: assign({ currentJobId: ({ event }) => event.id }),
         },
+        REMOVE_JOB: {
+          actions: assign({
+            workflow: ({ context, event }) => {
+              if (!context.workflow.jobs) return context.workflow;
+              const next = { ...context.workflow.jobs };
+              delete next[event.id];
+              return { ...context.workflow, jobs: next };
+            },
+          }),
+        },
         NEXT: 'confirm',
         BACK: 'triggers',
       },
@@ -125,6 +138,43 @@ export const wizardMachine = setup({
           target: 'stepConfig',
           actions: assign({
             currentStepIndex: ({ event }) => event.index,
+          }),
+        },
+        UPDATE_STEP: {
+          actions: assign({
+            workflow: ({ context, event }) => {
+              if (!context.workflow.jobs) return context.workflow;
+              const job = context.workflow.jobs[event.jobId];
+              if (!job || !('steps' in job)) return context.workflow;
+              const normalJob = job as NormalJob;
+              const newSteps = [...normalJob.steps];
+              newSteps[event.stepIndex] = event.step;
+              return {
+                ...context.workflow,
+                jobs: {
+                  ...context.workflow.jobs,
+                  [event.jobId]: { ...normalJob, steps: newSteps },
+                },
+              };
+            },
+          }),
+        },
+        REMOVE_STEP: {
+          actions: assign({
+            workflow: ({ context, event }) => {
+              if (!context.workflow.jobs) return context.workflow;
+              const job = context.workflow.jobs[event.jobId];
+              if (!job || !('steps' in job)) return context.workflow;
+              const normalJob = job as NormalJob;
+              const newSteps = normalJob.steps.filter((_, i) => i !== event.stepIndex);
+              return {
+                ...context.workflow,
+                jobs: {
+                  ...context.workflow.jobs,
+                  [event.jobId]: { ...normalJob, steps: newSteps },
+                },
+              };
+            },
           }),
         },
         NEXT: 'jobs',
