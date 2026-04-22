@@ -9,9 +9,10 @@ import { JobsPage } from './wizard/pages/jobs.js';
 import { JobConfigPage } from './wizard/pages/job-config.js';
 import { StepsPage } from './wizard/pages/steps.js';
 import { StepConfigPage } from './wizard/pages/step-config.js';
+import { ConfirmPage } from './wizard/pages/confirm.js';
 import { Layout } from './components/layout.js';
 
-function WizardRouter(): React.JSX.Element {
+export function WizardRouter(): React.JSX.Element {
   const [state] = useWizard();
   const page = state.value as string;
 
@@ -32,10 +33,18 @@ function WizardRouter(): React.JSX.Element {
       return <StepsPage />;
     case 'stepConfig':
       return <StepConfigPage />;
+    case 'confirm':
+      return <ConfirmPage />;
+    case 'done':
+      return (
+        <Box padding={1}>
+          <Text color="green">Done.</Text>
+        </Box>
+      );
     default:
       return (
         <Box padding={1}>
-          <Text>Page: {page} (coming soon)</Text>
+          <Text>Unknown state: {page}</Text>
         </Box>
       );
   }
