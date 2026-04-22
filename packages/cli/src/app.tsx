@@ -5,6 +5,10 @@ import { WelcomePage } from './wizard/pages/welcome.js';
 import { TemplateSelectPage } from './wizard/pages/template-select.js';
 import { WorkflowNamePage } from './wizard/pages/workflow-name.js';
 import { TriggersPage } from './wizard/pages/triggers.js';
+import { JobsPage } from './wizard/pages/jobs.js';
+import { JobConfigPage } from './wizard/pages/job-config.js';
+import { StepsPage } from './wizard/pages/steps.js';
+import { StepConfigPage } from './wizard/pages/step-config.js';
 import { Layout } from './components/layout.js';
 
 function WizardRouter(): React.JSX.Element {
@@ -20,6 +24,14 @@ function WizardRouter(): React.JSX.Element {
       return <WorkflowNamePage />;
     case 'triggers':
       return <TriggersPage />;
+    case 'jobs':
+      return <JobsPage />;
+    case 'jobConfig':
+      return <JobConfigPage />;
+    case 'steps':
+      return <StepsPage />;
+    case 'stepConfig':
+      return <StepConfigPage />;
     default:
       return (
         <Box padding={1}>
