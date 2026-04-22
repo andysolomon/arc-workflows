@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import type {
   Job,
+  Matrix,
   NormalJob,
   Permissions,
   PermissionScope,
@@ -12,6 +13,7 @@ import { TextField } from '../../components/text-field.js';
 import { StringList } from '../../components/string-list.js';
 import { KeyValueList } from '../../components/key-value-list.js';
 import { NumberField } from '../../components/number-field.js';
+import { MatrixConfigPage } from './matrix-config.js';
 
 type PermMode = 'default' | 'read-all' | 'write-all' | 'none' | 'custom';
 
@@ -30,6 +32,7 @@ interface FieldState {
   ifExpr: string;
   permMode: PermMode;
   customPerms: Record<string, string>;
+  matrix: Matrix | undefined;
   env: Record<string, string>;
   timeoutMinutes: number | null;
 }
@@ -55,6 +58,7 @@ export function JobConfigPage(): React.JSX.Element {
   const showNeeds = jobCount > 1;
 
   const [fields, setFields] = useState<FieldState>(() => initialFieldState(existingNormal));
+  const [subPage, setSubPage] = useState<'matrix' | null>(null);
 
   // Field index layout (dynamic since `needs` is only visible when >1 job):
   //   0 = name
@@ -63,9 +67,10 @@ export function JobConfigPage(): React.JSX.Element {
   //   3 = if
   //   4 = permissions mode picker
   //   5 = custom permissions KV list (only when permMode === 'custom')
-  //   6 = env
-  //   7 = timeout-minutes
-  //   8 = [Done]
+  //   6 = matrix (opens matrix sub-page on Enter)
+  //   7 = env
+  //   8 = timeout-minutes
+  //   9 = [Done]
   const positions = buildPositions(showNeeds, fields.permMode === 'custom');
 
   const [focusIndex, setFocusIndex] = useState(0);
@@ -75,32 +80,56 @@ export function JobConfigPage(): React.JSX.Element {
     return positions[focusIndex] ?? 'done';
   }
 
-  useInput((input, key) => {
-    if (key.tab) {
-      setFocusIndex((i) => (i + 1) % positions.length);
-      return;
-    }
-    if (key.escape) {
-      send({ type: 'BACK' });
-      return;
-    }
-    if (current() === 'permMode') {
-      if (key.leftArrow) {
-        setFields((f) => ({ ...f, permMode: prevPermMode(f.permMode) }));
-      } else if (key.rightArrow) {
-        setFields((f) => ({ ...f, permMode: nextPermMode(f.permMode) }));
+  useInput(
+    (input, key) => {
+      if (key.tab) {
+        setFocusIndex((i) => (i + 1) % positions.length);
+        return;
       }
-      return;
-    }
-    if (current() === 'done' && key.return) {
-      const newJob = buildNormalJob(existingNormal, fields);
-      send({ type: 'ADD_JOB', id: jobId, job: newJob });
-      send({ type: 'NEXT' });
-      return;
-    }
-    // Ignore other input when on read-only rows
-    void input;
-  });
+      if (key.escape) {
+        send({ type: 'BACK' });
+        return;
+      }
+      if (current() === 'permMode') {
+        if (key.leftArrow) {
+          setFields((f) => ({ ...f, permMode: prevPermMode(f.permMode) }));
+        } else if (key.rightArrow) {
+          setFields((f) => ({ ...f, permMode: nextPermMode(f.permMode) }));
+        }
+        return;
+      }
+      if (current() === 'matrix' && key.return) {
+        setSubPage('matrix');
+        return;
+      }
+      if (current() === 'done' && key.return) {
+        const newJob = buildNormalJob(existingNormal, fields);
+        send({ type: 'ADD_JOB', id: jobId, job: newJob });
+        send({ type: 'NEXT' });
+        return;
+      }
+      // Ignore other input when on read-only rows
+      void input;
+    },
+    { isActive: subPage === null },
+  );
+
+  if (subPage === 'matrix') {
+    return (
+      <MatrixConfigPage
+        initial={fields.matrix}
+        onCommit={(matrix) => {
+          setFields((f) => {
+            const next: FieldState = { ...f };
+            next.matrix = matrix;
+            return next;
+          });
+          setSubPage(null);
+        }}
+        onBack={() => setSubPage(null)}
+      />
+    );
+  }
 
   return (
     <Box flexDirection="column">
@@ -187,6 +216,17 @@ export function JobConfigPage(): React.JSX.Element {
         </Box>
       )}
 
+      <Box marginTop={1} flexDirection="column">
+        {current() === 'matrix' ? (
+          <Text color="cyan">{'> [Configure matrix ▸]'}</Text>
+        ) : (
+          <Text>{'  [Configure matrix ▸]'}</Text>
+        )}
+        {fields.matrix !== undefined && matrixSummary(fields.matrix) !== '' && (
+          <Text dimColor>{'  ' + matrixSummary(fields.matrix)}</Text>
+        )}
+      </Box>
+
       <Box marginTop={1}>
         <KeyValueList
           label="env"
@@ -221,6 +261,7 @@ type Position =
   | 'if'
   | 'permMode'
   | 'customPerms'
+  | 'matrix'
   | 'env'
   | 'timeoutMinutes'
   | 'done';
@@ -230,7 +271,7 @@ function buildPositions(showNeeds: boolean, showCustomPerms: boolean): Position[
   if (showNeeds) out.push('needs');
   out.push('if', 'permMode');
   if (showCustomPerms) out.push('customPerms');
-  out.push('env', 'timeoutMinutes', 'done');
+  out.push('matrix', 'env', 'timeoutMinutes', 'done');
   return out;
 }
 
@@ -267,16 +308,19 @@ function initialFieldState(job: NormalJob | undefined): FieldState {
         ? runsOnRaw.join(',')
         : 'ubuntu-latest';
 
-  return {
+  const state: FieldState = {
     name: job?.name ?? '',
     runsOn,
     needs,
     ifExpr: job?.if ?? '',
     permMode,
     customPerms,
+    matrix: undefined,
     env,
     timeoutMinutes: job?.['timeout-minutes'] ?? null,
   };
+  if (job?.strategy?.matrix !== undefined) state.matrix = job.strategy.matrix;
+  return state;
 }
 
 function initialPermState(perms: Permissions | undefined): {
@@ -320,7 +364,7 @@ function buildNormalJob(existing: NormalJob | undefined, fields: FieldState): No
   if (Object.keys(fields.env).length > 0) job.env = { ...fields.env };
   if (fields.timeoutMinutes !== null) job['timeout-minutes'] = fields.timeoutMinutes;
 
-  // Preserve other passthrough fields we don't edit yet (strategy, container, etc.)
+  // Preserve other passthrough fields we don't edit yet (container, etc.)
   if (existing) {
     if (existing.environment !== undefined) job.environment = existing.environment;
     if (existing.concurrency !== undefined) job.concurrency = existing.concurrency;
@@ -334,7 +378,40 @@ function buildNormalJob(existing: NormalJob | undefined, fields: FieldState): No
     }
   }
 
+  // Layer edited matrix onto strategy (overrides any passthrough matrix).
+  if (fields.matrix !== undefined) {
+    job.strategy = { ...(job.strategy ?? {}), matrix: fields.matrix };
+  } else if (job.strategy?.matrix !== undefined) {
+    const { matrix: _matrix, ...rest } = job.strategy;
+    void _matrix;
+    if (Object.keys(rest).length === 0) {
+      delete job.strategy;
+    } else {
+      job.strategy = rest;
+    }
+  }
+
   return job;
+}
+
+/**
+ * Build a one-line summary of a matrix for display under the focus
+ * row. Shows the editable dimension bag; include/exclude entries are
+ * reported as counts.
+ */
+function matrixSummary(matrix: Matrix): string {
+  const parts: string[] = [];
+  for (const [key, value] of Object.entries(matrix)) {
+    if (key === 'include' || key === 'exclude') continue;
+    if (Array.isArray(value)) {
+      parts.push(`${key}: [${value.map((v) => String(v)).join(', ')}]`);
+    }
+  }
+  const includes = matrix.include?.length ?? 0;
+  const excludes = matrix.exclude?.length ?? 0;
+  if (includes > 0) parts.push(`include: ${includes}`);
+  if (excludes > 0) parts.push(`exclude: ${excludes}`);
+  return parts.join('; ');
 }
 
 function buildPermissions(

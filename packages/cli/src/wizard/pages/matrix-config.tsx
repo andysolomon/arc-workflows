@@ -163,11 +163,7 @@ export function MatrixConfigPage({ initial, onCommit, onBack }: Props): React.JS
       </Box>
 
       <Box marginTop={1}>
-        {focusKind === 'done' ? (
-          <Text color="cyan">{'> [Done]'}</Text>
-        ) : (
-          <Text>{'  [Done]'}</Text>
-        )}
+        {focusKind === 'done' ? <Text color="cyan">{'> [Done]'}</Text> : <Text>{'  [Done]'}</Text>}
       </Box>
     </Box>
   );
