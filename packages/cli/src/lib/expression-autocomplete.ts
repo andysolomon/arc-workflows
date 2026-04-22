@@ -35,6 +35,9 @@ export function matchExpressionContexts(rowValue: string): readonly string[] {
   if (openIdx === -1) return [];
   const closeIdx = rowValue.lastIndexOf('}}');
   if (closeIdx > openIdx) return [];
-  const fragment = rowValue.slice(openIdx + '${{'.length).trim().toLowerCase();
+  const fragment = rowValue
+    .slice(openIdx + '${{'.length)
+    .trim()
+    .toLowerCase();
   return EXPRESSION_CONTEXTS.filter((c) => c.startsWith(fragment));
 }

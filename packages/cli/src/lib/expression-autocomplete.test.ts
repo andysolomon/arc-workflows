@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  EXPRESSION_CONTEXTS,
-  matchExpressionContexts,
-} from './expression-autocomplete.js';
+import { EXPRESSION_CONTEXTS, matchExpressionContexts } from './expression-autocomplete.js';
 
 describe('EXPRESSION_CONTEXTS', () => {
   it('includes the 12 GitHub Actions contexts', () => {

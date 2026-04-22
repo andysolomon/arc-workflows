@@ -42,11 +42,7 @@ describe('ActionStepForm', () => {
 
   it('does not show the action-picker dropdown when uses is empty', () => {
     const { lastFrame } = render(
-      <ActionStepForm
-        initial={{ uses: '' }}
-        onCommit={() => undefined}
-        onBack={() => undefined}
-      />,
+      <ActionStepForm initial={{ uses: '' }} onCommit={() => undefined} onBack={() => undefined} />,
     );
     const frame = lastFrame() ?? '';
     // No dropdown hint when the field is empty (nothing to match).

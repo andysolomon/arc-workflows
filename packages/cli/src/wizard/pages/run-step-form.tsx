@@ -103,8 +103,7 @@ export function RunStepForm({ initial, onCommit, onBack }: Props): React.JSX.Ele
     setExprMatches(matches);
   }
 
-  const showExprSuggestions =
-    current === 'env' && exprMatches.length > 0 && !exprDismissed;
+  const showExprSuggestions = current === 'env' && exprMatches.length > 0 && !exprDismissed;
 
   return (
     <Box flexDirection="column">

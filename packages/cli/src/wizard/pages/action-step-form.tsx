@@ -117,9 +117,7 @@ export function ActionStepForm({ initial, onCommit, onBack }: Props): React.JSX.
       return;
     }
     const matches = COMMON_ACTIONS.filter(
-      (a) =>
-        a.name.toLowerCase().includes(q) ||
-        a.tags.some((t) => t.toLowerCase().includes(q)),
+      (a) => a.name.toLowerCase().includes(q) || a.tags.some((t) => t.toLowerCase().includes(q)),
     ).slice(0, 10);
     setMatchedActions(matches);
   }

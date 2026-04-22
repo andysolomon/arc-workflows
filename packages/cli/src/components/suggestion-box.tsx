@@ -64,10 +64,7 @@ export function SuggestionBox<T>({
   if (!active || items.length === 0) return null;
 
   const half = Math.floor(maxVisible / 2);
-  const visibleStart = Math.max(
-    0,
-    Math.min(cursor - half, Math.max(0, items.length - maxVisible)),
-  );
+  const visibleStart = Math.max(0, Math.min(cursor - half, Math.max(0, items.length - maxVisible)));
   const visibleItems = items.slice(visibleStart, visibleStart + maxVisible);
 
   return (
