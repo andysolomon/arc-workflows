@@ -1,3 +1,9 @@
+## [1.12.0](https://github.com/andysolomon/arc-workflows/compare/v1.11.0...v1.12.0) (2026-04-22)
+
+### Features
+
+* **cli:** add jobs, steps, and step-config wizard pages (ARC-73) ([#22](https://github.com/andysolomon/arc-workflows/issues/22)) ([d874b31](https://github.com/andysolomon/arc-workflows/commit/d874b312026e55a0129c4875348a4a4fd174f808))
+
 ## [1.11.0](https://github.com/andysolomon/arc-workflows/compare/v1.10.0...v1.11.0) (2026-04-22)
 
 ### Features
