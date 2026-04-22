@@ -5,6 +5,14 @@ export interface KeyValueListProps {
   label: string;
   entries: Record<string, string>;
   onChange: (entries: Record<string, string>) => void;
+  /**
+   * Optional callback fired whenever the row under the cursor changes
+   * (on typing, backspace, or row creation). The parent receives the
+   * full raw row string (`KEY=VALUE` or a partial). Used by the
+   * wizard to power expression (`${{ }}`) autocomplete; existing
+   * consumers may omit it.
+   */
+  onCurrentValueChange?: (value: string) => void;
   placeholder?: string;
   active?: boolean;
 }
@@ -18,6 +26,7 @@ export function KeyValueList({
   label,
   entries,
   onChange,
+  onCurrentValueChange,
   placeholder,
   active = true,
 }: KeyValueListProps): React.JSX.Element {
@@ -27,7 +36,7 @@ export function KeyValueList({
   });
   const [cursor, setCursor] = useState(0);
 
-  function commit(newRows: string[]): void {
+  function commit(newRows: string[], activeRowIndex: number): void {
     setRows(newRows);
     const next: Record<string, string> = {};
     for (const row of newRows) {
@@ -39,6 +48,9 @@ export function KeyValueList({
       }
     }
     onChange(next);
+    if (onCurrentValueChange) {
+      onCurrentValueChange(newRows[activeRowIndex] ?? '');
+    }
   }
 
   useInput(
@@ -46,30 +58,43 @@ export function KeyValueList({
       if (!active) return;
 
       if (key.upArrow) {
-        setCursor((c) => Math.max(0, c - 1));
+        setCursor((c) => {
+          const nextCursor = Math.max(0, c - 1);
+          if (onCurrentValueChange) {
+            onCurrentValueChange(rows[nextCursor] ?? '');
+          }
+          return nextCursor;
+        });
         return;
       }
       if (key.downArrow) {
-        setCursor((c) => Math.min(rows.length - 1, c + 1));
+        setCursor((c) => {
+          const nextCursor = Math.min(rows.length - 1, c + 1);
+          if (onCurrentValueChange) {
+            onCurrentValueChange(rows[nextCursor] ?? '');
+          }
+          return nextCursor;
+        });
         return;
       }
       if (key.return) {
         const next = [...rows];
         next.splice(cursor + 1, 0, '');
-        commit(next);
+        commit(next, cursor + 1);
         setCursor(cursor + 1);
         return;
       }
       if (key.backspace || key.delete) {
-        const current = rows[cursor] ?? '';
-        if (current === '' && rows.length > 1) {
+        const currentRow = rows[cursor] ?? '';
+        if (currentRow === '' && rows.length > 1) {
           const next = rows.filter((_, i) => i !== cursor);
-          commit(next);
-          setCursor(Math.max(0, cursor - 1));
+          const nextCursor = Math.max(0, cursor - 1);
+          commit(next, nextCursor);
+          setCursor(nextCursor);
         } else {
           const next = [...rows];
-          next[cursor] = current.slice(0, -1);
-          commit(next);
+          next[cursor] = currentRow.slice(0, -1);
+          commit(next, cursor);
         }
         return;
       }
@@ -79,7 +104,7 @@ export function KeyValueList({
       if (input && input.length > 0) {
         const next = [...rows];
         next[cursor] = (next[cursor] ?? '') + input;
-        commit(next);
+        commit(next, cursor);
       }
     },
     { isActive: active },
