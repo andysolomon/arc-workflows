@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo, type ReactNode } from 'react';
-import { useMachine, useActor } from '@xstate/react';
+import { useMachine, useSelector } from '@xstate/react';
 import { createActor, type ActorRefFrom } from 'xstate';
 import { wizardMachine } from './machine.js';
 
@@ -20,10 +20,10 @@ const WizardStateContext = createContext<MachineState | null>(null);
  * - When no `actor` prop is passed, the provider creates its own machine
  *   via `useMachine(wizardMachine)` — the default production behavior
  *   used by `<App />`.
- * - When an external `actor` is passed, the provider subscribes to it
- *   via `useActor(actor)`. This enables programmatic tests (and the
- *   `runCreate` command) to create a shared actor, observe its state
- *   from outside the tree, and dispatch events directly.
+ * - When an external `actor` is passed, the provider subscribes to its
+ *   snapshots via `useSelector`. This enables programmatic tests (and
+ *   the `runCreate` command) to create a shared actor, observe its
+ *   state from outside the tree, and dispatch events directly.
  */
 export function WizardProvider({
   actor,
@@ -50,7 +50,8 @@ function ExternalActorProvider({
   actor: WizardActor;
   children: ReactNode;
 }): React.JSX.Element {
-  const [snapshot, send] = useActor(actor);
+  const snapshot = useSelector(actor, (s) => s);
+  const send = actor.send.bind(actor);
   // Match the tuple shape returned by useMachine: [state, send, service].
   const value = useMemo(
     () => [snapshot, send, actor] as unknown as MachineState,
