@@ -1,3 +1,9 @@
+## [1.13.0](https://github.com/andysolomon/arc-workflows/compare/v1.12.0...v1.13.0) (2026-04-22)
+
+### Features
+
+* **cli:** add matrix strategy builder sub-page (ARC-74) ([#23](https://github.com/andysolomon/arc-workflows/issues/23)) ([060f000](https://github.com/andysolomon/arc-workflows/commit/060f000480a66ebdfffefbd78676c1aa9623cb66))
+
 ## [1.12.0](https://github.com/andysolomon/arc-workflows/compare/v1.11.0...v1.12.0) (2026-04-22)
 
 ### Features
