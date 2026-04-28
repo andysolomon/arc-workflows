@@ -1,0 +1,11 @@
+name: Shorthand Triggers
+on: push
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Building on ${{ matrix.os }}"

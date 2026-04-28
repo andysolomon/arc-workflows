@@ -4,8 +4,8 @@ import { useWizard } from '../context.js';
 
 export function WorkflowNamePage(): React.JSX.Element {
   const [state, send] = useWizard();
-  const { templateId, workflow } = state.context;
-  const initialValue = templateId === null ? '' : (workflow.name ?? '');
+  const { workflow } = state.context;
+  const initialValue = workflow.name ?? '';
   const [value, setValue] = useState(initialValue);
   const [error, setError] = useState('');
 

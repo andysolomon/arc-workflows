@@ -1,0 +1,15 @@
+# This is a CI workflow
+# Maintained by the platform team.
+name: Commented CI
+# Triggers
+on:
+  push:
+    branches: [main] # only main
+jobs:
+  build:
+    runs-on: ubuntu-latest # use the standard runner
+    steps:
+      - uses: actions/checkout@v4
+      # Install deps before running tests
+      - run: npm ci
+      - run: npm test

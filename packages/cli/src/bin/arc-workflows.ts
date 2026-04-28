@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { runCreate } from '../commands/create.js';
+import { runEdit } from '../commands/edit.js';
 import { runValidate } from '../commands/validate.js';
 import { runListTemplates } from '../commands/list-templates.js';
 import { runGenerate } from '../commands/generate.js';
@@ -25,6 +26,14 @@ program
   .option('--template <id>', 'Pre-load a template by id')
   .action(async (opts: { template?: string }) => {
     const code = await runCreate(opts);
+    process.exit(code);
+  });
+
+program
+  .command('edit <file>')
+  .description('Edit an existing workflow YAML file in the wizard.')
+  .action(async (file: string) => {
+    const code = await runEdit(file);
     process.exit(code);
   });
 

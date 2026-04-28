@@ -17,6 +17,7 @@ npx arc-workflows
 | Command                                   | Description                                                                              | Example                                                      |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `arc-workflows` or `arc-workflows create` | Launch the interactive wizard.                                                           | `arc-workflows create --template ci-node`                    |
+| `arc-workflows edit <file>`               | Open an existing workflow YAML file in the wizard. Saves back to the same path on exit.  | `arc-workflows edit .github/workflows/ci.yml`                |
 | `arc-workflows validate <file>`           | Validate an existing workflow YAML file. Exit `0` valid, `1` invalid, `2` parse error.   | `arc-workflows validate .github/workflows/ci.yml`            |
 | `arc-workflows list-templates`            | List the 10 built-in templates.                                                          | `arc-workflows list-templates`                               |
 | `arc-workflows generate <file>`           | Generate YAML from a workflow JSON file. Prints to stdout by default; use `-o` to write. | `arc-workflows generate wf.json -o .github/workflows/ci.yml` |
@@ -26,6 +27,19 @@ npx arc-workflows
 ## Create flags
 
 - `--template <id>` — pre-load a template so the wizard skips the template-picker page. Run `arc-workflows list-templates` to see the available ids.
+
+## Editing existing workflows
+
+`arc-workflows edit <file>` parses the YAML, hydrates the wizard with the loaded workflow, and lands you on the **jobs** page so you can add, edit, or remove jobs and steps. On confirm, the file is rewritten in place at the same path (you can change the path on the review page).
+
+The behavior of the saved workflow is identical to the input, but **formatting is normalized**:
+
+- **Comments are stripped.** Leading and inline `# …` comments are not preserved across the round-trip. Keep important context in `name:` fields, step names, or commit messages instead.
+- **Key order is canonical.** Top-level and per-job keys are reordered into the canonical sequence (`name → on → jobs`, `runs-on → needs → if → strategy → steps`, etc.).
+- **Trigger shorthand expands.** `on: push` and `on: [push, pull_request]` become the equivalent object form (`on: { push: {} }`).
+- **Quoting and indentation may change** to match the generator's defaults (two-space indent, double-quoted strings where required).
+
+If you rely on a specific layout, edit the file by hand. Otherwise, the wizard is the safer path: every save round-trips through the same validator as `arc-workflows validate`.
 
 ## Keyboard shortcuts (wizard)
 
