@@ -250,6 +250,42 @@ describe('wizard state machine', () => {
     actor.stop();
   });
 
+  it('starts at jobs with hydrated context when input has workflow + sourcePath', () => {
+    const actor = createActor(wizardMachine, {
+      input: {
+        workflow: {
+          name: 'CI',
+          on: { push: {} },
+          jobs: {
+            build: {
+              'runs-on': 'ubuntu-latest',
+              steps: [{ run: 'echo hi' }],
+            },
+          },
+        },
+        sourcePath: '/tmp/ci.yml',
+      },
+    });
+    actor.start();
+    expect(actor.getSnapshot().value).toBe('jobs');
+    expect(actor.getSnapshot().context.workflow.name).toBe('CI');
+    expect(actor.getSnapshot().context.outputPath).toBe('/tmp/ci.yml');
+    expect(Object.keys(actor.getSnapshot().context.workflow.jobs ?? {})).toEqual(['build']);
+    actor.stop();
+  });
+
+  it('falls back to welcome when input has sourcePath but no jobs', () => {
+    const actor = createActor(wizardMachine, {
+      input: {
+        workflow: { name: 'Empty' },
+        sourcePath: '/tmp/empty.yml',
+      },
+    });
+    actor.start();
+    expect(actor.getSnapshot().value).toBe('welcome');
+    actor.stop();
+  });
+
   it('REMOVE_STEP is a no-op for an unknown job', () => {
     const actor = createActor(wizardMachine);
     actor.start();

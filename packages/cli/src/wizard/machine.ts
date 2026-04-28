@@ -1,10 +1,24 @@
 import { setup, assign } from 'xstate';
 import type { WizardContext } from './types.js';
-import type { NormalJob, Step, Triggers } from '@arc-workflows/core';
+import type { NormalJob, Step, Triggers, Workflow } from '@arc-workflows/core';
+
+/**
+ * Optional input passed when creating a wizard actor.
+ *
+ * - `workflow` — pre-hydrate the wizard with an existing workflow
+ *   (used by `runEdit` to load YAML into the wizard).
+ * - `sourcePath` — the file the workflow was loaded from; becomes the
+ *   default save path on the confirm page.
+ *
+ * When undefined (the default for `runCreate`), the machine starts
+ * with an empty workflow and lands at `welcome`.
+ */
+export type WizardInput = { workflow?: Workflow; sourcePath?: string } | undefined;
 
 export const wizardMachine = setup({
   types: {
     context: {} as WizardContext,
+    input: {} as WizardInput,
     events: {} as
       | { type: 'SELECT_CREATE' }
       | { type: 'SELECT_TEMPLATE'; templateId: string }
@@ -24,15 +38,26 @@ export const wizardMachine = setup({
   },
 }).createMachine({
   id: 'wizard',
-  initial: 'welcome',
-  context: {
-    workflow: { jobs: {} },
+  initial: 'bootstrap',
+  context: ({ input }) => ({
+    workflow: input?.workflow ?? { jobs: {} },
     currentJobId: null,
     currentStepIndex: null,
     templateId: null,
-    outputPath: null,
-  },
+    outputPath: input?.sourcePath ?? null,
+  }),
   states: {
+    bootstrap: {
+      always: [
+        {
+          guard: ({ context }) =>
+            context.outputPath !== null &&
+            Object.keys(context.workflow?.jobs ?? {}).length > 0,
+          target: 'jobs',
+        },
+        { target: 'welcome' },
+      ],
+    },
     welcome: {
       on: { SELECT_CREATE: 'templateSelect' },
     },
