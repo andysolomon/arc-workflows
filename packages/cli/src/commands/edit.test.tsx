@@ -6,7 +6,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { createActor } from 'xstate';
-import { parse, type Workflow } from '@arc-workflows/core';
+import { parse } from '@arc-workflows/core';
 import { wizardMachine } from '../wizard/machine.js';
 import { runEdit } from './edit.js';
 
@@ -81,7 +81,7 @@ describe('runEdit — integration', () => {
     expect(yaml).toContain('echo extra');
 
     // Round-trip the rewritten file: re-parse and confirm shape.
-    const reparsed = parse(yaml) as Workflow;
+    const reparsed = parse(yaml);
     expect(Object.keys(reparsed.jobs ?? {})).toContain('extra');
 
     actor.stop();

@@ -51,8 +51,7 @@ export const wizardMachine = setup({
       always: [
         {
           guard: ({ context }) =>
-            context.outputPath !== null &&
-            Object.keys(context.workflow?.jobs ?? {}).length > 0,
+            context.outputPath !== null && Object.keys(context.workflow?.jobs ?? {}).length > 0,
           target: 'jobs',
         },
         { target: 'welcome' },

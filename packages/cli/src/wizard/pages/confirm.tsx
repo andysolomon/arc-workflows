@@ -22,9 +22,7 @@ export function ConfirmPage(): React.JSX.Element {
   const [state, send] = useWizard();
   const name = state.context.workflow.name ?? 'workflow';
   const slugDefault = `.github/workflows/${slugify(name)}.yml`;
-  const [outputPath, setOutputPath] = useState<string>(
-    state.context.outputPath ?? slugDefault,
-  );
+  const [outputPath, setOutputPath] = useState<string>(state.context.outputPath ?? slugDefault);
   const [focus, setFocus] = useState<Focus>('path');
 
   useInput((_input, key) => {
