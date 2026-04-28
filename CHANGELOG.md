@@ -1,3 +1,9 @@
+## [1.15.0](https://github.com/andysolomon/arc-workflows/compare/v1.14.0...v1.15.0) (2026-04-28)
+
+### Features
+
+* **cli:** add CLI entry point with subcommand routing and E2E tests (ARC-76) ([#25](https://github.com/andysolomon/arc-workflows/issues/25)) ([6054ec5](https://github.com/andysolomon/arc-workflows/commit/6054ec5b3f3c65b33a2a9496541f6cc1733515aa))
+
 ## [1.14.0](https://github.com/andysolomon/arc-workflows/compare/v1.13.0...v1.14.0) (2026-04-22)
 
 ### Features
