@@ -1,3 +1,9 @@
+## [1.16.0](https://github.com/andysolomon/arc-workflows/compare/v1.15.0...v1.16.0) (2026-04-28)
+
+### Features
+
+* **cli:** add edit command for round-trip workflow editing (ARC-78) ([#26](https://github.com/andysolomon/arc-workflows/issues/26)) ([98cf136](https://github.com/andysolomon/arc-workflows/commit/98cf13657495660cbde7e06c2180c41e7d46e2e9))
+
 ## [1.15.0](https://github.com/andysolomon/arc-workflows/compare/v1.14.0...v1.15.0) (2026-04-28)
 
 ### Features
