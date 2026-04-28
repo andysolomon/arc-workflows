@@ -1,8 +1,8 @@
 # arc-workflows
 
-A delightful tool for creating GitHub Actions workflows — through an interactive CLI wizard, a programmatic API, and (soon) a visual web app.
+A delightful tool for creating GitHub Actions workflows — through an interactive CLI wizard, a programmatic TypeScript API, a Hono REST server, and a Next.js visual editor.
 
-> **Status:** Phase 0 complete (scaffold + tooling). Phase 1 (core engine) in progress.
+> **Status:** Roadmap complete (Phases 0–4). Latest release: see [`CHANGELOG.md`](./CHANGELOG.md).
 
 ## Why
 
@@ -12,27 +12,30 @@ Writing GitHub Actions YAML by hand is tedious. The spec is large, mistakes don'
 - **Catches errors before commit** with structured validation
 - **Live YAML preview** updates as you make choices in the CLI
 - **10 built-in templates** (CI for Node/Python, deploys, releases, Docker, cron, dispatch, reusable, monorepo)
-- **Programmatic API** for building workflows in TypeScript
-- **Visual editor** in the browser (coming in Phase 4)
+- **Round-trip edit mode** — `arc-workflows edit <file>` loads existing YAML back into the wizard
+- **Programmatic API** for building workflows in TypeScript (fluent builder + REST endpoints)
+- **Visual editor** at [arc-workflows.dev](https://arc-workflows.vercel.app) — React Flow DAG view, Monaco YAML preview, GitHub save
 
 ## Architecture
 
-This is a pnpm monorepo with three packages:
+This is a pnpm monorepo with three packages plus the web app:
 
 ```
 arc-workflows/
 ├── packages/
-│   ├── core/    # @arc-workflows/core — schema, validation, YAML generation, templates
-│   ├── cli/     # arc-workflows — Ink-based interactive wizard
-│   └── api/     # @arc-workflows/api — fluent builder + Hono REST server
-└── web/         # Next.js + React Flow visual builder (Phase 4)
+│   ├── core/        # @arc-workflows/core — schema, validation, YAML generation, parser, templates
+│   ├── cli/         # arc-workflows — Ink-based interactive wizard with create + edit
+│   └── api/         # @arc-workflows/api — fluent builder + Hono REST server
+└── apps/
+    └── web/         # @arc-workflows/web — Next.js 15 + React Flow + Monaco visual editor
 ```
 
-| Package               | Purpose                                                                                                                                           |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@arc-workflows/core` | TypeScript types modeling the GitHub Actions spec, validation pipeline, YAML generation, and built-in templates. Zero runtime deps beyond `yaml`. |
-| `arc-workflows` (CLI) | Ink (React for terminals) wizard with split-pane live YAML preview, expression autocomplete, and an action picker.                                |
-| `@arc-workflows/api`  | Fluent TypeScript builder API and a Hono REST server that wraps `core`.                                                                           |
+| Package               | Purpose                                                                                                                                                                          |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@arc-workflows/core` | TypeScript types modeling the GitHub Actions spec, validation pipeline, YAML generation, YAML parser, and built-in templates. Zero runtime deps beyond `yaml` and `cron-parser`. |
+| `arc-workflows` (CLI) | Ink (React for terminals) wizard with split-pane live YAML preview, expression autocomplete, action picker, and a round-trip edit mode.                                          |
+| `@arc-workflows/api`  | Fluent TypeScript builder API (`workflow().on().job().step()`) and a Hono REST server with Zod-validated endpoints.                                                              |
+| `@arc-workflows/web`  | Next.js 15 app with template gallery, React Flow DAG editor, Monaco YAML preview, and GitHub OAuth save-to-repo. Hono API mounted at `/api/v1/*`.                                |
 
 ## Tech stack
 
