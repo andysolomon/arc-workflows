@@ -60,18 +60,22 @@ if (!result.valid) {
 
 ## API reference
 
-| Export                            | Type     | Purpose                                     |
-| --------------------------------- | -------- | ------------------------------------------- |
-| `Workflow`                        | type     | The full GitHub Actions workflow shape      |
-| `Job`, `NormalJob`, `ReusableJob` | type     | Job variants                                |
-| `Step`, `ActionStep`, `RunStep`   | type     | Step variants (discriminated union)         |
-| `generate(workflow, options?)`    | function | Generate YAML string                        |
-| `writeWorkflow(workflow, path?)`  | function | Generate and write to disk                  |
-| `validate(workflow)`              | function | Run validation pipeline                     |
-| `getTemplate(id, params?)`        | function | Get a built-in template                     |
-| `listTemplates()`                 | function | List all template metadata                  |
-| `expr<T>(template)`               | function | Tag a string as a GitHub Actions expression |
-| `isExpressionString(value)`       | function | Detect a `${{ }}` expression                |
+| Export                            | Type     | Purpose                                                   |
+| --------------------------------- | -------- | --------------------------------------------------------- |
+| `Workflow`                        | type     | The full GitHub Actions workflow shape                    |
+| `Job`, `NormalJob`, `ReusableJob` | type     | Job variants                                              |
+| `Step`, `ActionStep`, `RunStep`   | type     | Step variants (discriminated union)                       |
+| `generate(workflow, options?)`    | function | Generate YAML string                                      |
+| `writeWorkflow(workflow, path?)`  | function | Generate and write to disk                                |
+| `parse(yamlString)`               | function | Parse YAML to a `Workflow` (normalizes trigger shorthand) |
+| `validate(workflow)`              | function | Run validation pipeline                                   |
+| `getTemplate(id, params?)`        | function | Get a built-in template                                   |
+| `listTemplates()`                 | function | List all template metadata                                |
+| `expr<T>(template)`               | function | Tag a string as a GitHub Actions expression               |
+| `isExpressionString(value)`       | function | Detect a `${{ }}` expression                              |
+| `loadConfig(path?)`               | function | Load a project's `arc.config.{ts,js,json}` file           |
+| `ParseError`                      | class    | Thrown by `parse()` on YAML syntax errors                 |
+| `formatPath(path)`                | function | Format a validation error path for display                |
 
 See the [TypeScript types](./dist/index.d.ts) for full details.
 

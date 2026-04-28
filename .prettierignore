@@ -6,3 +6,5 @@ package-lock.json
 CHANGELOG.md
 *.tsbuildinfo
 .husky/_
+.claude
+.next
