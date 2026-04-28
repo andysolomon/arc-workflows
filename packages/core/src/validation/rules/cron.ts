@@ -7,7 +7,9 @@
  * user should fix before committing the workflow.
  */
 
-import { parseExpression } from 'cron-parser';
+import cronParser from 'cron-parser';
+
+const { parseExpression } = cronParser;
 
 import type { Workflow } from '../../schema/index.js';
 import type { Rule, ValidationError } from '../errors.js';
